@@ -1,9 +1,12 @@
-<div style="display: flex; flex-direction: column; height: max-content; max-width: 640px; margin: 0 auto; border: 1px solid #ccc;">
-  <main style="flex: 1; overflow: auto; padding: 16px;">
+<div id="container">
+  <main id="main-content">
     <router-outlet></router-outlet>
   </main>
   <footer style="display: flex; justify-content: space-between; padding: 16px; border-top: 1px solid #ccc;">
-    <button mat-raised-button>Previous</button>
-    <button mat-raised-button>Next</button>
+    <button matButton="elevated" (click)="onPreviousClick()">Previous</button>
+    <button matButton="elevated" (click)="onNextClick()">Next</button>
   </footer>
 </div>
+<style>
+
+</style>

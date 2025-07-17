@@ -1,0 +1,5 @@
+<mat-chip-set aria-label="Fish selection">
+    @for(boat of boats; track boat['id']) {
+        <mat-chip>{{ boat['name'] }}</mat-chip>
+    }
+</mat-chip-set>
