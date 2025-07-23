@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
 import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs';
+import { AppState } from '../app-state';
 
 @Component({
     selector: 'app-check-in-or-out',
@@ -12,25 +13,39 @@ import { firstValueFrom } from 'rxjs';
 
 
 
-export class CheckInOrOutComponent {
+export class CheckInOrOutComponent implements OnInit {
+    currentState: AppState | undefined;
 
 
     constructor(private stateService: StateService) { }
 
+
+
     async onToggleChange(event: MatButtonToggleChange): Promise<void> {
         // Handle toggle change logic here
-        let currentState = await firstValueFrom(this.stateService.currentState);
+        if (!this.currentState) {
+            this.currentState = await firstValueFrom(this.stateService.currentState);
+        }
+        
         //let currentState = await this.stateService.currentState.firstValueFrom();
-        console.log('Current state:', currentState);
+        
         if (event.value === 'check-in') {
             console.log('Check In selected');
             // You can add logic to switch between check-in and check-out modes
-            currentState.checkOutInProgress = false;
+            this.currentState.checkOutInProgress = false;
         } else {
             console.log('Check Out selected');
-            currentState.checkOutInProgress = true;
+            this.currentState.checkOutInProgress = true;
         }
         // You can add logic to switch between check-in and check-out modes
-        this.stateService.updateState(currentState);
+        this.currentState.enableNextButton = true; // Enable Next button
+        this.stateService.updateState(this.currentState);
+    }
+
+    async ngOnInit(): Promise<void> {
+        this.currentState = await firstValueFrom(this.stateService.currentState);
+        console.log('Current state:', this.currentState);
+        this.currentState.enableNextButton = false; // Disable Next button initially
+        this.currentState.enablePreviousButton = false; // Disable Previous button initially
     }
 }

@@ -1,1 +1,48 @@
-<p>who-are-you works!</p>
+<h2>Tell us who you are</h2>
+<div style="display: flex; gap: 16px;">
+    <mat-form-field appearance="fill">
+        <mat-label>First letter of family name</mat-label>
+        <input matInput id="family-initial" type="text" maxlength="1" [value]="familyInitial"
+            (input)="familyInitialSet($event)" (change)="contentChanged()" />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Day of Month</mat-label>
+        <mat-select id="day-select" [(value)]="day" (selectionChange)="contentChanged()">
+            <mat-option value="">Select day</mat-option>
+            <mat-option *ngFor="let day of [].constructor(31); let i = index" [value]="i+1">{{i+1}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+        <mat-label>Month</mat-label>
+        <mat-select id="month-select" [(value)]="month" (selectionChange)="contentChanged()">
+            <mat-option value="">Select month</mat-option>
+            <mat-option value="1">January</mat-option>
+            <mat-option value="2">February</mat-option>
+            <mat-option value="3">March</mat-option>
+            <mat-option value="4">April</mat-option>
+            <mat-option value="5">May</mat-option>
+            <mat-option value="6">June</mat-option>
+            <mat-option value="7">July</mat-option>
+            <mat-option value="8">August</mat-option>
+            <mat-option value="9">September</mat-option>
+            <mat-option value="10">October</mat-option>
+            <mat-option value="11">November</mat-option>
+            <mat-option value="12">December</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="enableYearField">
+        <mat-form-field appearance="fill">
+            <mat-label>Year</mat-label>
+            <mat-select id="year-select" [(value)]="year" (selectionChange)="contentChanged()">
+                <mat-option value="">Select year</mat-option>
+                <mat-option *ngFor="let y of years" [value]="y">{{ y }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+
+
+</div>
+<div>
+    <app-show-user-name [userName]="displayUserName"></app-show-user-name>
+</div>

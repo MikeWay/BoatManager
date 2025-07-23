@@ -3,8 +3,8 @@
     <router-outlet></router-outlet>
   </main>
   <footer style="display: flex; justify-content: space-between; padding: 16px; border-top: 1px solid #ccc;">
-    <button matButton="elevated" (click)="onPreviousClick()">Previous</button>
-    <button matButton="elevated" (click)="onNextClick()">Next</button>
+    <button matButton="elevated" (click)="onPreviousClick()" [disabled]="!currentState?.enablePreviousButton">Previous</button>
+    <button matButton="elevated" (click)="onNextClick()" [disabled]="!currentState?.enableNextButton">Next</button>
   </footer>
 </div>
 <style>

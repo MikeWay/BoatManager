@@ -1,0 +1,7 @@
+<h2>Tell us why you are taking the boat out</h2>
+
+<mat-chip-listbox aria-label="Boat Selection" class="mat-mdc-chip-set-stacked">
+    @for(reason of reasons; track reason) {
+        <mat-chip-option (selectionChange)="onReasonChange($event)">{{ reason }}</mat-chip-option>
+    }
+</mat-chip-listbox>

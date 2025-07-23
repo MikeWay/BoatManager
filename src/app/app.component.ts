@@ -13,14 +13,14 @@ import { AppState } from './app-state';
 export class AppComponent implements OnInit, OnDestroy {
 
   private currentPage: string = 'check-in-or-out';
-  private currentState: AppState | undefined;
+  public currentState: AppState | undefined;
 
   // Note: these transtion names MUST match the route names in app.routes.ts
   private pageTransitionsCheckOut: { [key: string]: string } = {
     'check-in-or-out': 'boat-list',
-    'boat-list': 'whoAreYou',
-    'whoAreYou': 'reasonForCheckout',
-    'reasonForCheckout': 'checkedOut'
+    'boat-list': 'who-are-you',
+    'who-are-you': 'tell-us-why',
+    'tell-us-why': 'checkedOut'
   };
 
   private pageTransitionsCheckIn: { [key: string]: string } = {
@@ -49,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
       // Handle state changes if needed
       console.log('Current state:', state);
       this.currentState = state;
+      enableNextPrev(state)
     });
   }
    
@@ -72,3 +73,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.router.navigate([`/${this.currentPage}`]);
   }
 }
+function enableNextPrev(state: AppState) {
+  console.log('Enabling Next/Previous buttons based on state:', state);
+  if(state.enableNextButton) {
+    document.querySelector('button[mat-button="elevated"]:last-of-type')?.removeAttribute('disabled');
+  }
+  else {
+    document.querySelector('button[mat-button="elevated"]:last-of-type')?.setAttribute('disabled', 'true');
+  }
+  if(state.enablePreviousButton) {
+    document.querySelector('button[mat-button="elevated"]:first-of-type')?.removeAttribute('disabled');
+  }
+  else {
+    document.querySelector('button[mat-button="elevated"]:first-of-type')?.setAttribute('disabled', 'true');
+  }
+}
+
