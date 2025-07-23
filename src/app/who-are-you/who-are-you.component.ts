@@ -9,12 +9,14 @@ import { AppState } from '../app-state';
 import { ServerService } from '../server.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { ShowUserNameComponent } from '../show-user-name/show-user-name.component';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-who-are-you',
   imports: [CommonModule, MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatCardModule,
     ShowUserNameComponent
 
   ],

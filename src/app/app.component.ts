@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { StateService } from './state-service';
 import { AppState } from './app-state';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatButtonModule],
+  standalone: true,
+  imports: [RouterOutlet, MatButtonModule, MatIconModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.sass'
 })
@@ -20,7 +22,8 @@ export class AppComponent implements OnInit, OnDestroy {
     'check-in-or-out': 'boat-list',
     'boat-list': 'who-are-you',
     'who-are-you': 'tell-us-why',
-    'tell-us-why': 'checkedOut'
+    'tell-us-why': 'check-out-complete',
+    'check-out-complete': 'check-in-or-out'
   };
 
   private pageTransitionsCheckIn: { [key: string]: string } = {
@@ -71,6 +74,14 @@ export class AppComponent implements OnInit, OnDestroy {
     const previousPage = Object.keys(transitions).find(key => transitions[key] === this.currentPage);
     this.currentPage = previousPage || 'check-in-or-out';
     this.router.navigate([`/${this.currentPage}`]);
+  }
+
+  onHomeClick(): void {
+    // Navigate to the home page
+    console.log('Home button clicked');
+    this.currentPage = 'check-in-or-out';
+
+    this.router.navigate(['/check-in-or-out']);
   }
 }
 function enableNextPrev(state: AppState) {

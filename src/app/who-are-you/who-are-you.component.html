@@ -1,10 +1,18 @@
-<h2>Tell us who you are</h2>
-<div style="display: flex; gap: 16px;">
-    <mat-form-field appearance="fill">
-        <mat-label>First letter of family name</mat-label>
-        <input matInput id="family-initial" type="text" maxlength="1" [value]="familyInitial"
-            (input)="familyInitialSet($event)" (change)="contentChanged()" />
-    </mat-form-field>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div style="text-align: center; width: 100%;">Tell us who you are</div>
+  </mat-card-header>
+  <mat-card-content>
+    <div style="display: flex; gap: 16px;">
+    </div>
+    <div style="display: flex; gap: 16px;">
+        <label for="family-initial">First letter of family name:</label>
+        <mat-form-field appearance="fill" style="flex: 1; max-width: 2ch;">
+            <input matInput id="family-initial" type="text" maxlength="1" [value]="familyInitial"
+                   (input)="familyInitialSet($event)" (change)="contentChanged()" style="width: 1ch; min-width: 1ch; max-width: 2ch; text-align: center;" />
+        </mat-form-field>
+    </div>
+    <div style="display: flex; gap: 16px;">
     <mat-form-field appearance="fill">
         <mat-label>Day of Month</mat-label>
         <mat-select id="day-select" [(value)]="day" (selectionChange)="contentChanged()">
@@ -43,6 +51,8 @@
 
 
 </div>
+</mat-card-content>
+</mat-card>
 <div>
     <app-show-user-name [userName]="displayUserName"></app-show-user-name>
 </div>

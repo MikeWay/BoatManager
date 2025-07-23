@@ -5,11 +5,12 @@ import { MatChipListbox, MatChipOption, MatChipSelectionChange } from '@angular/
 import { AppState } from '../app-state';
 import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
   selector: 'app-tell-us-why',
-  imports: [MatChipOption, MatChipListbox],
+  imports: [MatChipOption, MatChipListbox,MatCardModule],
   templateUrl: './tell-us-why.component.html',
   styleUrl: './tell-us-why.component.sass'
 })

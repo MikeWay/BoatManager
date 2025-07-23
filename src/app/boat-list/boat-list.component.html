@@ -1,5 +1,13 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <div style="text-align: center; width: 100%;">Select a Boat</div>
+  </mat-card-header>
+  <mat-card-content>
+
 <mat-chip-listbox aria-label="Boat Selection" class="mat-mdc-chip-set-stacked">
     @for(boat of boats; track boat['id']) {
         <mat-chip-option (selectionChange)="onBoatSelectionChange($event)">{{ boat['name'] }}</mat-chip-option>
     }
 </mat-chip-listbox>
+  </mat-card-content>
+</mat-card>

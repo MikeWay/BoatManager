@@ -6,11 +6,12 @@ import { Boat } from '../../model/Boat'; // Adjusted the path to the correct loc
 import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { AppState } from '../app-state'; // Adjusted the path to the correct location
+import { MatCardModule } from '@angular/material/card';
 
 
 @Component({
   selector: 'app-boat-list',
-  imports: [MatChipsModule],
+  imports: [MatChipsModule,MatCardModule],
   templateUrl: './boat-list.component.html',
   styleUrl: './boat-list.component.sass'
 })
