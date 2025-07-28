@@ -6,17 +6,19 @@ import { MatSelectModule } from '@angular/material/select';
 import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs';
 import { AppState } from '../app-state';
-import { ServerService } from '../server.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { AuthenticationException, ServerService } from '../server.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ShowUserNameComponent } from '../show-user-name/show-user-name.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipListbox, MatChipOption, MatChipSelectionChange } from '@angular/material/chips';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-who-are-you',
   imports: [CommonModule, MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatCardModule,
+    MatCardModule, MatChipOption, MatChipListbox,
     ShowUserNameComponent
 
   ],
@@ -29,14 +31,22 @@ export class WhoAreYouComponent implements OnInit {
   public month: string = '';
   public year: Number = 0; // Optional field used only if multiple people are found
   public day: Number = 0;
-  public displayUserName=""
+  public displayUserName = ""
   public enableYearField: boolean = false;
   public years: Number[] = [];
+  public qwertyRows: string[] = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+  public keyBoardWidths: string[] = ['100', '95', '80'];
 
- 
+  private lastSelectedSource: MatChipOption | undefined;
+
   private _snackBar = inject(MatSnackBar);
 
-  constructor(private stateService: StateService, private server: ServerService) { }
+  constructor(
+    private stateService: StateService,
+    private server: ServerService,
+    public router: Router
+  ) { }
+
 
   familyInitialSet(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -49,28 +59,45 @@ export class WhoAreYouComponent implements OnInit {
       const formValid = !!this.familyInitial && !!this.month && !!this.day;
       if (formValid) {
         // Call the server to check if the 3 fields match a person
-        const matchingPeople = await this.server.checkPerson(this.familyInitial, this.month, this.day, this.year);
-        if (!matchingPeople || matchingPeople.length === 0) {
-          console.warn('No person found with the provided details');
-          this.currentState.enableNextButton = false;
+        try {
+          const matchingPeople = await this.server.checkPerson(this.familyInitial, this.month, this.day, this.year);
+
+          if (!matchingPeople || matchingPeople.length === 0) {
+            console.warn('No person found with the provided details');
+            this.currentState.enableNextButton = false;
+            this.stateService.updateState(this.currentState);
+            return;
+          }
+          // If more than one person is found: enable year field
+          if (matchingPeople.length > 1) {
+            console.warn('Multiple people found with the provided details');
+            this.currentState.enableNextButton = false;
+            this.stateService.updateState(this.currentState);
+            this.enableYearField = true;
+            return;
+          }
+          // If a single person is found, update the state
+          this.currentState.currentPerson = matchingPeople[0];
+          this.displayUserName = `${matchingPeople[0].firstName} ${matchingPeople[0].lastName}`
+          this.currentState.enableNextButton = true;
           this.stateService.updateState(this.currentState);
-          return;
+        } catch (error) {
+          if (error instanceof AuthenticationException) {
+            console.error('Authentication error:', error);
+            this.router.navigate(['/login']);
+          }
         }
-        // If more than one person is found: enable year field
-        if (matchingPeople.length > 1) {
-          console.warn('Multiple people found with the provided details');
-          this.currentState.enableNextButton = false;
-          this.stateService.updateState(this.currentState);
-          this.enableYearField = true;
-          return;
-        }
-        // If a single person is found, update the state
-        this.currentState.currentPerson = matchingPeople[0];
-        this.displayUserName = `${matchingPeople[0].firstName} ${matchingPeople[0].lastName}`
-        this.currentState.enableNextButton = true;
-        this.stateService.updateState(this.currentState);
       }
     }
+  }
+
+  onLetterChange($event: MatChipSelectionChange) {
+    this.familyInitial = $event.selected ? $event.source.value : undefined;
+    if (this.lastSelectedSource && this.lastSelectedSource !== $event.source) {
+      this.lastSelectedSource.selected = false; // Deselect the previously selected chip
+    }
+    this.lastSelectedSource = $event.source;
+    this.contentChanged();
   }
 
   async ngOnInit() {

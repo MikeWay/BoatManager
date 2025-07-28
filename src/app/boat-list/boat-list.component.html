@@ -4,9 +4,9 @@
   </mat-card-header>
   <mat-card-content>
 
-<mat-chip-listbox aria-label="Boat Selection" class="mat-mdc-chip-set-stacked">
+<mat-chip-listbox aria-label="Boat Selection" class="mat-mdc-chip-set-stacked" [value]="selectedBoat" >
     @for(boat of boats; track boat['id']) {
-        <mat-chip-option (selectionChange)="onBoatSelectionChange($event)">{{ boat['name'] }}</mat-chip-option>
+        <mat-chip-option (selectionChange)="onBoatSelectionChange($event)" [value]="boat">{{ boat['name'] }}</mat-chip-option>
     }
 </mat-chip-listbox>
   </mat-card-content>

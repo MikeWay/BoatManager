@@ -15,6 +15,8 @@ import { AppState } from '../app-state';
 
 export class CheckInOrOutComponent implements OnInit {
     currentState: AppState | undefined;
+    inOut: string = ''; // Default to check-in
+
 
 
     constructor(private stateService: StateService) { }
@@ -31,11 +33,15 @@ export class CheckInOrOutComponent implements OnInit {
         
         if (event.value === 'check-in') {
             console.log('Check In selected');
+            this.inOut = 'checkIn';
             // You can add logic to switch between check-in and check-out modes
             this.currentState.checkOutInProgress = false;
+            this.currentState.checkInInProgress = true;
         } else {
             console.log('Check Out selected');
+            this.inOut = 'checkOut'; 
             this.currentState.checkOutInProgress = true;
+            this.currentState.checkInInProgress = false;
         }
         // You can add logic to switch between check-in and check-out modes
         this.currentState.enableNextButton = true; // Enable Next button
@@ -47,5 +53,13 @@ export class CheckInOrOutComponent implements OnInit {
         console.log('Current state:', this.currentState);
         this.currentState.enableNextButton = false; // Disable Next button initially
         this.currentState.enablePreviousButton = false; // Disable Previous button initially
+        if (this.currentState.checkOutInProgress) {
+            this.inOut = 'checkOut';
+            this.currentState.enableNextButton = true; // Enable Next button for check-out
+        }
+        if( this.currentState.checkInInProgress) {
+            this.inOut = 'checkIn';
+            this.currentState.enableNextButton = true; // Enable Next button for check-in
+        }
     }
 }

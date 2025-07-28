@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Person } from '../model/Person';
+import { Boat } from '../model/Boat';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +10,13 @@ import { Person } from '../model/Person';
 export class ServerService {
 
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:4200/api'; // Adjust the base URL as needed
+  private baseUrl = './api'; // Adjust the base URL as needed
 
 
   // Add the checkPerson method
   async checkPerson(familyInitial: string, month: string, day: Number, year: Number): Promise<Person[] | null> {
-  
-    if(familyInitial.trim() !== '' && month.trim() !== '' && day != 0){
+
+    if (familyInitial.trim() !== '' && month.trim() !== '' && day != 0) {
       return await firstValueFrom(this.http.post<Person[]>(`${this.baseUrl}/check-person`, {
         familyInitial,
         month,
@@ -23,11 +24,59 @@ export class ServerService {
         year
       }))
         .catch((error) => {
+          if (error instanceof HttpErrorResponse && error.status === 401) {
+            throw new AuthenticationException('Unauthorized access. Please log in.');
+          }
           console.error('Error checking person:', error);
           return null; // Return null if there's an error
         });
     }
     return Promise.resolve(null);
   }
-  
+
+  async checkoutBoat(boat: Boat, user: Person): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-out-boat`, { boat, user }));
+      return response;
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error checking out boat:', error);
+      return false;
+    }
+  }
+
+  async getAvailableBoats(): Promise<Boat[]> {
+    try {
+      return await firstValueFrom(this.http.get<Boat[]>(`${this.baseUrl}/available-boats`));
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error fetching available boats:', error);
+      return [];
+    }
+  }
+
+  async getCheckedOutBoats(): Promise<Boat[]> {
+    try {
+      return await firstValueFrom(this.http.get<Boat[]>(`${this.baseUrl}/checked-out-boats`));
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error fetching checked out boats:', error);
+      return [];
+    }
+  }
+
+
+}
+
+export class AuthenticationException extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'AuthenticationException';
+  }
 }

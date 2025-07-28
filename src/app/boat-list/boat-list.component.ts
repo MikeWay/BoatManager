@@ -7,6 +7,8 @@ import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
 import { AppState } from '../app-state'; // Adjusted the path to the correct location
 import { MatCardModule } from '@angular/material/card';
+import { AuthenticationException, ServerService } from '../server.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -17,14 +19,14 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class BoatListComponent implements OnInit {
   currentState: AppState | undefined;
-  constructor(private stateService: StateService) { }
+  constructor(private stateService: StateService, private server: ServerService, private router: Router) { }
 
-  private selectedBoat: Boat | undefined;
+  public selectedBoat: Boat | undefined;
 
   onBoatSelectionChange($event: MatChipSelectionChange) {
     this.selectedBoat = $event.selected ? $event.source.value : undefined;
     if (this.currentState) {
-      this.currentState.setCurrentBoat(this.selectedBoat);
+      this.currentState.setCurrentBoat(this.selectedBoat ?? null);
       this.currentState.enableNextButton = !!this.selectedBoat; // Enable Next button if a boat is selected
       this.currentState.enablePreviousButton = true; // Enable Previous button
       console.log('Selected boat:', this.selectedBoat);
@@ -36,10 +38,25 @@ export class BoatListComponent implements OnInit {
 
   async ngOnInit() {
     this.selectedBoat = undefined;
-    const boats = await dao.boatManager.getAvailableBoats();
-    this.boats = boats;
+    try {
+      this.boats = await this.server.getAvailableBoats();
+    } catch (error) {
+      if (error instanceof AuthenticationException) {
+        console.error('Authentication error:', error);
+        this.router.navigate(['/login']);
+      } else {
+        console.error('Error fetching available boats:', error);
+      }
+      this.boats = [];
+    }
     this.currentState = await firstValueFrom(this.stateService.currentState);
     this.currentState.enableNextButton = false;
+    this.currentState.enablePreviousButton = true; // Disable Previous button initially
+    // find the current boat in the list of boats
+    if (this.currentState && this.currentState.getCurrentBoat()) {
+      this.selectedBoat = this.boats.find(boat => boat.id === this.currentState!.getCurrentBoat()?.id);
+    }
+
   }
 
 }

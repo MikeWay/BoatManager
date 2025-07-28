@@ -1,0 +1,21 @@
+<p>You should only see this form if accessing the application from a new device.</p>
+<p>There will eventually be a secure password but for now just use "rowlocks" and your email address</p>
+<form [formGroup]="form">
+
+    <fieldset>
+        <legend>Login</legend>
+        <div class="form-field">
+            <label>Email:</label>
+            <input name="email" formControlName="email">
+        </div>
+        <div class="form-field">
+            <label>Password:</label>
+            <input name="password" formControlName="password" 
+                   type="password">
+        </div>
+    </fieldset>
+    <div class="form-buttons">
+        <button class="button button-primary" 
+                (click)="login()">Login</button>
+    </div>
+</form>
