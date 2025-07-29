@@ -14,7 +14,7 @@ import { AppState } from './app-state';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  private currentPage: string = 'check-in-or-out';
+  private currentPage: string = 'check-in-or-out'; // The current page in the state machine
   public currentState: AppState | undefined;
 
   // Note: these transtion names MUST match the route names in app.routes.ts
@@ -54,6 +54,14 @@ export class AppComponent implements OnInit, OnDestroy {
       this.currentState = state;
       enableNextPrev(state)
     });
+    // observe changes to the router URL  
+    this.router.events.subscribe(() => {
+      // Update the current page based on the router URL
+      this.currentPage = this.router.url.replace('/', '') || 'check-in-or-out';
+      console.log('Current page:', this.currentPage);
+      enableNextPrev(this.currentState!);
+    });
+
   }
    
 
