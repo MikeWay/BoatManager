@@ -29,12 +29,11 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   private pageTransitionsCheckIn: { [key: string]: string } = {
-    'check-in-or-out': 'startCheckIn',
-    'startCheckIn': 'recordEngineHours',
-    'recordEngineHours': 'areThereDefects',
-    'areThereDefects': 'reportFault',
-    'reportFault': 'checkInComplete',
-    'checkInComplete': 'page1'
+    'check-in-or-out': 'boat-list',
+    'boat-list': 'confirm-check-in',
+    'confirm-check-in': 'check-in-complete',
+    'check-in-complete': 'page1',
+    'report-problem': 'check-in-complete',
   };
 
   title = 'BoatManager';
@@ -71,8 +70,16 @@ export class AppComponent implements OnInit, OnDestroy {
     // Handle Next button click logic here
     console.log('Next button clicked');
     const transitions = this.currentState?.checkOutInProgress ? this.pageTransitionsCheckOut : this.pageTransitionsCheckIn;
+    
     // route to 'next' page
     this.currentPage = transitions[this.currentPage] || 'check-in-or-out';  
+    if(this.currentPage === 'check-in-complete') {
+      if(this.currentState?.problemsWithBoat) {
+        this.currentPage = 'report-problem'; // If there are problems with the boat, go to the report problem page
+
+      }
+      
+    }
     this.router.navigate([`/${this.currentPage}`]);
   }
 
@@ -91,7 +98,7 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('Home button clicked');
     this.currentPage = 'check-in-or-out';
 
-    this.router.navigate(['/check-in-or-out']);
+    this.router.navigate(['/']);
   }
 }
 function enableNextPrev(state: AppState) {

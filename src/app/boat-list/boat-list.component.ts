@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-boat-list',
-  imports: [MatChipsModule,MatCardModule],
+  imports: [MatChipsModule, MatCardModule],
   templateUrl: './boat-list.component.html',
   styleUrl: './boat-list.component.sass'
 })
@@ -38,18 +38,25 @@ export class BoatListComponent implements OnInit {
 
   async ngOnInit() {
     this.selectedBoat = undefined;
+    this.currentState = await firstValueFrom(this.stateService.currentState);
     try {
-      this.boats = await this.server.getAvailableBoats();
+      if (this.currentState.checkOutInProgress) {
+        this.boats = await this.server.getAvailableBoats();
+      }
+      else if (this.currentState.checkInInProgress) {
+        this.boats = await this.server.getCheckedOutBoats();
+      }
+
     } catch (error) {
       if (error instanceof AuthenticationException) {
         console.error('Authentication error:', error);
         this.router.navigate(['/login']);
       } else {
-        console.error('Error fetching available boats:', error);
+        console.error('Error fetching boats list:', error);
       }
       this.boats = [];
     }
-    this.currentState = await firstValueFrom(this.stateService.currentState);
+
     this.currentState.enableNextButton = false;
     this.currentState.enablePreviousButton = true; // Disable Previous button initially
     // find the current boat in the list of boats

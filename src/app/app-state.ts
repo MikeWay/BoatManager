@@ -3,23 +3,18 @@ import { Boat } from "../model/Boat";
 export class AppState {
 
     constructor() {
-        this.boats = [];
-        this.logs = [];
-        this.persons = [];
+
         this.reasonForCheckout = null;
         this.currentBoat = null;
         this.currentLog = null;
         this.currentPerson = null;      
         this.isLoading = false;
         this.error = null;
-        this.message = 'Welcome to Boat Manager';
-        this.checkOutInProgress = undefined;
+         this.checkOutInProgress = undefined;
         this.enableNextButton = false;
         this.enablePreviousButton = false;
+        this.problemsWithBoat = false;
     }
-    public boats: any[] = [];
-    public logs: any[] = [];
-    public persons: any[] = [];
     public reasonForCheckout: string | null = null;
     private currentBoat: Boat | null = null;
 
@@ -40,13 +35,12 @@ export class AppState {
     public checkInInProgress: boolean | undefined;
     public enableNextButton: boolean = false;
     public enablePreviousButton: boolean = false;
+    public problemsWithBoat: boolean | undefined;
 
 }
 
 export interface AppStateInterface {
-    boats: Boat[];
-    logs: any[];
-    persons: any[];
+
     reasonForCheckout: string | null;
     currentBoat: Boat | null;
     currentLog: any;

@@ -37,7 +37,7 @@ export class CheckInOrOutComponent implements OnInit {
             // You can add logic to switch between check-in and check-out modes
             this.currentState.checkOutInProgress = false;
             this.currentState.checkInInProgress = true;
-        } else {
+        } else if (event.value === 'check-out') {
             console.log('Check Out selected');
             this.inOut = 'checkOut'; 
             this.currentState.checkOutInProgress = true;
