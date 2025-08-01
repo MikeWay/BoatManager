@@ -25,3 +25,15 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Flow - checkin
+Check in flow:
+- Select check - in
+- Display list of checked - out boats
+  - User selectes one
+- Confirmation Screen - did you check this boat out?
+  - Yes - continue
+  - No - who are you and why are you checking it in
+- Report any issues
+  - Confirm fuel and key return
+- Complete check - in

@@ -2,10 +2,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { MatCard } from "@angular/material/card";
+import { MatCardHeader, MatCardContent, MatCardTitle, MatCardActions } from "@angular/material/card";
+import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatCard, MatCardHeader, MatCardContent, MatCardTitle, MatInputModule, MatCardActions, MatButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.sass'
 })

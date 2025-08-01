@@ -5,20 +5,18 @@
     <mat-card-content>
         <label for="family-initial">First letter of family name:</label>
         <div style="width: 100%; display: flex; justify-content: center;">
-
-
             <div class="parent-container flex-centered">
-                @for(row of qwertyRows; track row; let index = $index) {
-                <mat-chip-listbox aria-label="family-initial" [ngStyle]="{'width.%': keyBoardWidths[index]}" multiple="false" id="family-initial" >
-
-                    @for(key of row; track key) {
-                    <mat-chip-option (selectionChange)="onLetterChange($event)">{{ key }}</mat-chip-option>
-                    }
-                </mat-chip-listbox>
+            @for(row of qwertyRows; track row; let index = $index) {
+            <mat-chip-listbox aria-label="family-initial" [ngStyle]="{'width.%': keyBoardWidths[index]}" multiple="false" id="family-initial" >
+                @for(key of row; track key) {
+                <mat-chip-option (selectionChange)="onLetterChange($event)">{{ key }}</mat-chip-option>
                 }
-
-
+            </mat-chip-listbox>
+            }
             </div>
+        </div>
+        <div style="text-align: center; margin: 16px 0;">
+            Tell us the day, month and (if prompted) year of your birth
         </div>
         <div style="display: flex; gap: 16px; justify-content: center;">
             <mat-form-field appearance="fill">

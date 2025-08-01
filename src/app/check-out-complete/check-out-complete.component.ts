@@ -30,7 +30,7 @@ export class CheckOutCompleteComponent implements OnInit {
     try {
       // Do the actual checkout
       if (this.currentState.currentBoat && this.currentState.currentPerson) {
-        const success = await this.server.checkoutBoat(this.currentState.currentBoat, this.currentState.currentPerson);
+        const success = await this.server.checkoutBoat(this.currentState.currentBoat, this.currentState.currentPerson, this.reason);
         if (success) {
           console.log('Checkout successful');
         } else {

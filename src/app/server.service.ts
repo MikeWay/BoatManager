@@ -34,9 +34,9 @@ export class ServerService {
     return Promise.resolve(null);
   }
 
-  async checkoutBoat(boat: Boat, user: Person): Promise<boolean> {
+  async checkoutBoat(boat: Boat, user: Person, reason: string): Promise<boolean> {
     try {
-      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-out-boat`, { boat, user }));
+      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-out-boat`, { boat, user, reason }));
       return response;
     } catch (error) {
       if (error instanceof HttpErrorResponse && error.status === 401) {

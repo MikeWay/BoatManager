@@ -1,9 +1,19 @@
 import { test, expect } from '@playwright/test';
 
 test('check the e2e flow for check out', async ({ page }) => {
+  await page.goto('http://localhost:3000/admin-login');
+  await page.getByRole('textbox', { name: 'Email:' }).fill('dogsbody@exe-sailing-club.org');
+  await page.getByRole('textbox', { name: 'Password:' }).fill('password123');
+  await page.getByRole('button', { name: 'Login' }).click();
   await page.goto('http://localhost:3000/admin');
   await page.getByRole('button', { name: 'Check In All Boats' }).click();
   await page.goto('http://localhost:4200/');
+    await page.goto('http://localhost:4200/login');
+  await page.getByRole('textbox', { name: 'Email' }).click();
+  await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
+  await page.getByRole('textbox', { name: 'Email' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
+  await page.getByRole('button', { name: 'Login' }).click();
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'Spare Rib' }).click();

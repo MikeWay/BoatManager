@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { StateService } from './state-service';
 import { AppState } from './app-state';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private currentPage: string = 'check-in-or-out'; // The current page in the state machine
   public currentState: AppState | undefined;
+  public version: string = environment.version; // Default version, can be updated from environment
 
   // Note: these transtion names MUST match the route names in app.routes.ts
   private pageTransitionsCheckOut: { [key: string]: string } = {
