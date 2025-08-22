@@ -8,6 +8,7 @@ import { Boat } from '../../model/Boat';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AppState } from '../app-state';
 @Component({
   selector: 'app-confirm-check-in',
   standalone: true,
@@ -20,7 +21,7 @@ export class ConfirmCheckInComponent implements OnInit {
 
   boatName: any;
   userName: any;
-  currentState: any;
+  currentState: AppState | undefined;
 problemsWithBoat: any;
 returnedKey: any;
 refueledBoat: any;
@@ -30,10 +31,10 @@ iAmTheUser: any;
 
   async ngOnInit() {
     this.currentState = await firstValueFrom(this.stateService.currentState);
-    const boat: Boat = this.currentState.getCurrentBoat();
+    const boat: Boat | null = this.currentState.currentBoat;
     if (boat) {
       this.boatName = boat.name; // Assuming the Boat object has a 'name'
-      this.userName = boat.checkedOutTo; // Assuming checkedOutTo is a property
+      this.userName = boat.checkedOutToName; // Assuming checkedOutTo is a property
     } else {
       console.error('No boat selected for check-in confirmation.');
       this.router.navigate(['/']);
@@ -43,8 +44,8 @@ iAmTheUser: any;
 
   onProblemsChange($event: MatRadioChange<any>) {
     this.problemsWithBoat = $event.value;
-    this.currentState.problemsWithBoat = this.problemsWithBoat === 'Yes';
-    this.stateService.updateState(this.currentState);
+    this.currentState!.problemsWithBoat = this.problemsWithBoat === 'Yes';
+    this.stateService.updateState(this.currentState!);
   }
 
 

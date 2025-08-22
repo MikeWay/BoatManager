@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { Person } from '../model/Person';
 import { Boat } from '../model/Boat';
+import { Defect, DefectType } from '../model/defect';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,19 @@ export class ServerService {
     }
   }
 
+  async checkInBoat(boat: Boat, user: Person, problems: DefectType[], additionalInfo: string): Promise<boolean> {
+    try {
+      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-in-boat`, { boat, user, problems, additionalInfo }));
+      return response;
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error checking in boat:', error);
+      return false;
+    }
+  } 
+
   async getAvailableBoats(): Promise<Boat[]> {
     try {
       return await firstValueFrom(this.http.get<Boat[]>(`${this.baseUrl}/available-boats`));
@@ -70,7 +84,17 @@ export class ServerService {
       return [];
     }
   }
-
+  async getPossibleDefectsList(): Promise<DefectType[]> {
+    try {
+      return await firstValueFrom(this.http.get<DefectType[]>(`${this.baseUrl}/defects-list`));
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error fetching defects list:', error);
+      return [];
+    }
+  }
 
 }
 

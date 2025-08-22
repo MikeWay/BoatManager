@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { AuthenticationException, ServerService } from '../server.service';
 import { Router } from '@angular/router';
+import { AppState } from '../app-state';
 
 @Component({
   selector: 'app-check-out-complete',
@@ -15,7 +16,7 @@ export class CheckOutCompleteComponent implements OnInit {
   boatName: any;
   userName: any;
   reason: any;
-  currentState: any;
+  currentState: AppState | null = null;
   constructor(private stateService: StateService, private server: ServerService, private router: Router) { }
 
 

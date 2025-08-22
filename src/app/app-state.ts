@@ -1,4 +1,5 @@
 import { Boat } from "../model/Boat";
+import { DefectType } from "../model/defect";
 
 export class AppState {
 
@@ -16,15 +17,9 @@ export class AppState {
         this.problemsWithBoat = false;
     }
     public reasonForCheckout: string | null = null;
-    private currentBoat: Boat | null = null;
+    public currentBoat: Boat | null = null;
 
-    public getCurrentBoat(): Boat | null {
-        return this.currentBoat;
-    }
 
-    public setCurrentBoat(boat: Boat | null): void {
-        this.currentBoat = boat;
-    }
     public currentLog: any = null;
     public currentPerson: any = null;
     public isLoading: boolean = false;
@@ -36,6 +31,8 @@ export class AppState {
     public enableNextButton: boolean = false;
     public enablePreviousButton: boolean = false;
     public problemsWithBoat: boolean | undefined;
+    public defects: DefectType[] = [];
+    public defectsAdditionalInfo: string = '';
 
 }
 

@@ -3,11 +3,11 @@
     <router-outlet></router-outlet>
   </main>
   <footer style="display: flex; justify-content: space-between; padding: 16px; border-top: 1px solid #ccc;">
-    <button matButton="elevated" (click)="onPreviousClick()" [disabled]="!currentState?.enablePreviousButton">Previous</button>
+    <button matButton="elevated" (click)="onPreviousClick()" [disabled]="!currentState?.enablePreviousButton" id="previousButton">Previous</button>
     <button mat-icon-button aria-label="Home" (click)="onHomeClick()">
       <mat-icon>home</mat-icon>
     </button>
-    <button matButton="elevated" (click)="onNextClick()" [disabled]="!currentState?.enableNextButton">Next</button>
+    <button matButton="elevated" (click)="onNextClick()" [disabled]="!currentState?.enableNextButton" id="nextButton">Next</button>
   </footer>
   <p>{{ version }}</p>
 </div>

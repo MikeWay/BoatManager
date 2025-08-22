@@ -26,12 +26,17 @@
             </mat-checkbox>
         </div>
         <p>Were there any problems with the boat?</p>
+
         <div class="checkbox-row">
-<mat-radio-group aria-label="Select an option" >
-  <mat-radio-button value="Yes" [(ngModel)]="problemsWithBoat" (change)="onProblemsChange($event)">Yes</mat-radio-button>
-  <mat-radio-button value="No" [(ngModel)]="problemsWithBoat" (change)="onProblemsChange($event)">No</mat-radio-button>
-</mat-radio-group>
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="problemsWithBoat" name="problemsWithBoat">
+                <mat-radio-button value="Yes" (change)="onProblemsChange($event)"
+                    name="problemsWithBoat">Yes</mat-radio-button>
+                <mat-radio-button value="No" (change)="onProblemsChange($event)"
+                    name="problemsWithBoat">No</mat-radio-button>
+            </mat-radio-group>
+
         </div>
+
     </mat-card-content>
 
 </mat-card>

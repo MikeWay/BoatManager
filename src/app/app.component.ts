@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     'check-in-or-out': 'boat-list',
     'boat-list': 'confirm-check-in',
     'confirm-check-in': 'check-in-complete',
-    'check-in-complete': 'page1',
+    'check-in-complete': 'check-in-or-out',
     'report-problem': 'check-in-complete',
   };
 
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     // this.stateService.currentState.unsubscribe(); -- Uncomment if you need to unsubscribe from the state service
     // Note: BehaviorSubject does not require manual unsubscription, but if you have other subscriptions
   }
-    
+
 
   ngOnInit(): void {
     // Initialize the state service or any other necessary setup
@@ -64,22 +64,24 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
   }
-   
+
 
   onNextClick(): void {
     // Handle Next button click logic here
     console.log('Next button clicked');
     const transitions = this.currentState?.checkOutInProgress ? this.pageTransitionsCheckOut : this.pageTransitionsCheckIn;
-    
-    // route to 'next' page
-    this.currentPage = transitions[this.currentPage] || 'check-in-or-out';  
-    if(this.currentPage === 'check-in-complete') {
-      if(this.currentState?.problemsWithBoat) {
-        this.currentPage = 'report-problem'; // If there are problems with the boat, go to the report problem page
 
+    // route to 'next' page
+    if (this.currentPage === 'confirm-check-in') {
+      if (this.currentState?.problemsWithBoat) {
+        this.currentPage = 'report-problem'; // If there are problems with the boat, go to the report problem page
       }
-      
+
+    } else {
+      this.currentPage = transitions[this.currentPage] || 'check-in-or-out'; // Default to check-in-or-out if no transition found
     }
+    //this.currentPage = transitions[this.currentPage] || 'check-in-or-out';  
+    console.log('Navigating to:', this.currentPage);
     this.router.navigate([`/${this.currentPage}`]);
   }
 
@@ -103,17 +105,17 @@ export class AppComponent implements OnInit, OnDestroy {
 }
 function enableNextPrev(state: AppState) {
   console.log('Enabling Next/Previous buttons based on state:', state);
-  if(state.enableNextButton) {
-    document.querySelector('button[mat-button="elevated"]:last-of-type')?.removeAttribute('disabled');
+  if (state.enableNextButton) {
+    document.getElementById('nextButton')?.removeAttribute('disabled');
   }
   else {
-    document.querySelector('button[mat-button="elevated"]:last-of-type')?.setAttribute('disabled', 'true');
+    document.getElementById('nextButton')?.setAttribute('disabled', 'true');
   }
-  if(state.enablePreviousButton) {
-    document.querySelector('button[mat-button="elevated"]:first-of-type')?.removeAttribute('disabled');
+  if (state.enablePreviousButton) {
+    document.getElementById('previousButton')?.removeAttribute('disabled');
   }
   else {
-    document.querySelector('button[mat-button="elevated"]:first-of-type')?.setAttribute('disabled', 'true');
+    document.getElementById('previousButton')?.setAttribute('disabled', 'true');
   }
 }
 

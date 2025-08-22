@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatChipListboxChange, MatChipSelectionChange, MatChipsModule } from '@angular/material/chips';
-import { dao } from '../../model/dao';
-import { BoatManager } from '../../model/BoatManager'; // Adjusted the path to the correct location
+import { MatChipSelectionChange, MatChipsModule } from '@angular/material/chips';
 import { Boat } from '../../model/Boat'; // Adjusted the path to the correct location
 import { StateService } from '../state-service';
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom';
@@ -26,7 +24,7 @@ export class BoatListComponent implements OnInit {
   onBoatSelectionChange($event: MatChipSelectionChange) {
     this.selectedBoat = $event.selected ? $event.source.value : undefined;
     if (this.currentState) {
-      this.currentState.setCurrentBoat(this.selectedBoat ?? null);
+      this.currentState.currentBoat = (this.selectedBoat ?? null);
       this.currentState.enableNextButton = !!this.selectedBoat; // Enable Next button if a boat is selected
       this.currentState.enablePreviousButton = true; // Enable Previous button
       console.log('Selected boat:', this.selectedBoat);
@@ -58,10 +56,11 @@ export class BoatListComponent implements OnInit {
     }
 
     this.currentState.enableNextButton = false;
-    this.currentState.enablePreviousButton = true; // Disable Previous button initially
+    this.currentState.enablePreviousButton = true; 
     // find the current boat in the list of boats
-    if (this.currentState && this.currentState.getCurrentBoat()) {
-      this.selectedBoat = this.boats.find(boat => boat.id === this.currentState!.getCurrentBoat()?.id);
+    if (this.currentState && this.currentState.currentBoat) {
+      this.currentState.enableNextButton = true;
+      this.selectedBoat = this.boats.find(boat => boat.id === this.currentState!.currentBoat?.id);
     }
 
   }
