@@ -1,5 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
+const ribNames = ['Blue Rib', 'Yellow Rib', 'White Rib', 'Orange Rib', 'Grey Rib', 'Tornado II'];
 
 test('full checkin-checkout flow', async ({ page }) => {
   await checkInAllBoats(page)
@@ -93,8 +94,33 @@ test('Checking with multiple issues', async ({ page }) => {
   await downloadReport(page);
 });
 
+test('check out then in no faults - storing engine hours', async ({ page }) => {
+  await checkOutThenIn_NoFaults(page, '05:00', 'Sailability');
+   await checkOutThenIn_NoFaults(page, '01:20', 'Dinghy Racing');
+   await checkOutThenIn_NoFaults(page, '02:30', 'Dinghy Cruising');
+   await checkOutThenIn_NoFaults(page, '03:40', 'Cruiser Racing');
+   await checkOutThenIn_NoFaults(page, '04:50', 'Training');
+   await checkOutThenIn_NoFaults(page, '06:00', 'Other');
+  await checkOutThenIn_NoFaults(page, '02:00', 'Sailability');
+   await checkOutThenIn_NoFaults(page, '03:20', 'Dinghy Racing');
+   await checkOutThenIn_NoFaults(page, '01:30', 'Dinghy Cruising');
+   await checkOutThenIn_NoFaults(page, '01:40', 'Cruiser Racing');
+   await checkOutThenIn_NoFaults(page, '05:50', 'Training');
+   await checkOutThenIn_NoFaults(page, '01:00', 'Other');
 
-async function downloadReport(page) {
+});
+/*
+
+
+            "Sailability",
+            "Maintenance",
+            "Dinghy Racing",
+            "Dinghy Cruising",
+            "Cruiser Racing",
+            "Training",
+            "Other"
+            */
+async function downloadReport(page: Page) {
   await page.goto('http://localhost:3000/admin-login');
   await page.getByRole('textbox', { name: 'Email:' }).click();
   await page.getByRole('textbox', { name: 'Email:' }).fill('vice @exe-sailing-club.org');
@@ -116,4 +142,59 @@ async function downloadReport(page) {
       console.log(`Processed CSV Data: ${csvData}`);
     });
   });
+}
+
+/*
+Reason should be one of:         checkout_reasons: [
+            "Sailability",
+            "Maintenance",
+            "Dinghy Racing",
+            "Dinghy Cruising",
+            "Cruiser Racing",
+            "Training",
+            "Other"
+        ],
+        */
+async function checkOutThenIn_NoFaults(page: Page, hours: string, reason: string ){
+  // randomly select a string from ribNames
+  const randomRibName = ribNames[Math.floor(Math.random() * ribNames.length)];
+  await checkInAllBoats(page)
+  await page.goto('http://localhost:4200/');
+  await page.getByRole('radio', { name: 'Check Out' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  if (await page.isVisible('#loginForm')) {
+    await page.getByRole('textbox', { name: 'Email' }).click();
+    await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
+    await page.getByRole('textbox', { name: 'Email' }).press('Tab');
+    await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
+    await page.getByRole('button', { name: 'Login' }).click();
+    await page.getByRole('button', { name: 'Next' }).click();
+  }
+  await page.getByRole('option', { name: randomRibName }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: 'w' }).click();
+  await page.getByRole('combobox', { name: 'Day of Month' }).locator('span').click();
+  await page.getByRole('option', { name: '14' }).click();
+  await page.getByText('Select month').click();
+  await page.getByRole('option', { name: 'July' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: reason }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Home' }).click();
+  await page.getByRole('radio', { name: 'Check In' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: randomRibName }).click();
+  //await page.getByRole('option', { name: 'Blue Rib' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
+  await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
+  await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
+  await page.getByRole('textbox', { name: 'Engine Hours' }).click();
+  await page.getByRole('textbox', { name: 'Engine Hours' }).fill(hours);
+  await page.getByRole('radio', { name: 'No' }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  
+  await expect(page.getByText('Thank You')).toBeVisible();  
+  await page.getByRole('button', { name: 'Home' }).click();
+
 }

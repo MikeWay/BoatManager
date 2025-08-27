@@ -11,10 +11,16 @@ import { AppState } from './app-state';
 })
 export class StateService {
   
-  private stateSource = new BehaviorSubject<AppState>(new AppState);
+  private appState = new AppState
+  private stateSource = new BehaviorSubject<AppState>(this.appState);
   currentState = this.stateSource.asObservable();
 
   updateState(state: AppState) {
     this.stateSource.next(state);
+  }
+
+  resetState() {
+    this.appState = new AppState();
+    this.stateSource.next(this.appState );
   }
 }

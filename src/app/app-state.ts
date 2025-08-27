@@ -2,6 +2,9 @@ import { Boat } from "../model/Boat";
 import { DefectType } from "../model/defect";
 
 export class AppState {
+    engineHours: number;
+  returnedKey: any;
+  refueledBoat: any;
 
     constructor() {
 
@@ -15,6 +18,9 @@ export class AppState {
         this.enableNextButton = false;
         this.enablePreviousButton = false;
         this.problemsWithBoat = false;
+        this.engineHours = 0;
+        this.returnedKey = null;
+        this.refueledBoat = null;
     }
     public reasonForCheckout: string | null = null;
     public currentBoat: Boat | null = null;
@@ -33,7 +39,25 @@ export class AppState {
     public problemsWithBoat: boolean | undefined;
     public defects: DefectType[] = [];
     public defectsAdditionalInfo: string = '';
-
+    public reset(): void {
+        this.reasonForCheckout = null;
+        this.currentBoat = null;
+        this.currentLog = null;
+        this.currentPerson = null;
+        this.isLoading = false;
+        this.error = null;
+        this.message = 'Welcome to Boat Manager';
+        this.checkOutInProgress = undefined;
+        this.checkInInProgress = undefined;
+        this.enableNextButton = false;
+        this.enablePreviousButton = false;
+        this.problemsWithBoat = false;
+        this.defects = [];
+        this.defectsAdditionalInfo = '';
+        this.engineHours = 0;
+        this.returnedKey = null;
+        this.refueledBoat = null;
+    }
 }
 
 export interface AppStateInterface {

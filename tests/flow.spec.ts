@@ -1,14 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page } from '@playwright/test';
 
-test('check the e2e flow for check out', async ({ page }) => {
-  await page.goto('http://localhost:3000/admin-login');
-  await page.getByRole('textbox', { name: 'Email:' }).fill('dogsbody@exe-sailing-club.org');
-  await page.getByRole('textbox', { name: 'Password:' }).fill('password123');
-  await page.getByRole('button', { name: 'Login' }).click();
+test('check the e2e flow for check out (leaves Spare Rib checked out)', async ({ page }) => {
+  await logIn(page);
   await page.goto('http://localhost:3000/admin');
   await page.getByRole('button', { name: 'Check In All Boats' }).click();
   await page.goto('http://localhost:4200/');
-    await page.goto('http://localhost:4200/login');
+  await page.goto('http://localhost:4200/login');
   await page.getByRole('textbox', { name: 'Email' }).click();
   await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
   await page.getByRole('textbox', { name: 'Email' }).press('Tab');
@@ -32,6 +29,7 @@ test('check the e2e flow for check out', async ({ page }) => {
 });
 
 test('check that it fails if non-existent user specified', async ({ page }) => {
+  await logIn(page);
   await page.goto('http://localhost:3000/admin');
   await page.getByRole('button', { name: 'Check In All Boats' }).click();
   await page.goto('http://localhost:4200/');
@@ -48,6 +46,7 @@ test('check that it fails if non-existent user specified', async ({ page }) => {
 });
 
 test('check that previous is enabled from the boat selection screen', async ({ page }) => {
+  await logIn(page);
   await page.goto('http://localhost:3000/admin');
   await page.getByRole('button', { name: 'Check In All Boats' }).click();
   await page.goto('http://localhost:4200/');
@@ -69,6 +68,7 @@ test('check that the state is remembered when returning to the check in/out scre
 });
 
 test('check that the state is remembered when returning to the boat selection screen', async ({ page }) => {
+  await logIn(page);
   await page.goto('http://localhost:3000/admin');
   await page.getByRole('button', { name: 'Check In All Boats' }).click();
   await page.goto('http://localhost:4200/');
@@ -81,3 +81,11 @@ test('check that the state is remembered when returning to the boat selection sc
   await expect(page.getByRole('button', { name: 'Previous' })).toBeEnabled();
   await expect(page.getByRole('option', { name: 'Spare Rib' })).toBeChecked
 });
+
+
+async function logIn(page: Page) {
+  await page.goto('http://localhost:3000/admin-login');
+  await page.getByRole('textbox', { name: 'Email:' }).fill('vice@exe-sailing-club.org');
+  await page.getByRole('textbox', { name: 'Password:' }).fill('password');
+  await page.getByRole('button', { name: 'Login' }).click();
+}

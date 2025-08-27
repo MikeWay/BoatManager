@@ -10,20 +10,27 @@
 
         <p>I confirm that: </p>
         <div class="checkbox-row">
-            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="iAmTheUser">
+            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="iAmTheUser" (ngModelChange)="modelChange()">
                 I am <strong>{{ userName }}</strong>.
             </mat-checkbox>
             <span style="font-size: 0.9em;">&nbsp;(If not: you will be taken to a page to identify yourself.)</span>
         </div>
         <div class="checkbox-row">
-            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="returnedKey">
+            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="returnedKey" (ngModelChange)="modelChange()">
                 I have returned the key.
             </mat-checkbox>
         </div>
         <div class="checkbox-row">
-            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="refueledBoat">
+            <mat-checkbox class="center-toggle-group" style="font-size: 0.9em;" [(ngModel)]="refueledBoat" (ngModelChange)="modelChange()">
                 I have refueled the boat.
             </mat-checkbox>
+        </div>
+
+        <div class="input-row" style="margin: 16px 0;">
+            <mat-form-field appearance="fill" style="width: 100%;">
+                <mat-label>Engine Hours</mat-label>
+                <input matInput type="time" [(ngModel)]="engineHours" min="0" placeholder="Enter engine hours" (ngModelChange)="modelChange()">
+            </mat-form-field>
         </div>
         <p>Were there any problems with the boat?</p>
 

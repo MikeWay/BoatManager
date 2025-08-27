@@ -53,14 +53,18 @@ export class AppComponent implements OnInit, OnDestroy {
       // Handle state changes if needed
       console.log('Current state:', state);
       this.currentState = state;
-      enableNextPrev(state)
+      //enableNextPrev(state)
     });
     // observe changes to the router URL  
     this.router.events.subscribe(() => {
       // Update the current page based on the router URL
-      this.currentPage = this.router.url.replace('/', '') || 'check-in-or-out';
+      if(this.router.url === '/?reset=true') {
+        this.currentPage = 'check-in-or-out';
+      } else {
+        this.currentPage = this.router.url.replace('/', '') || 'check-in-or-out';
+      }
       console.log('Current page:', this.currentPage);
-      enableNextPrev(this.currentState!);
+      //enableNextPrev(this.currentState!);
     });
 
   }
@@ -72,13 +76,10 @@ export class AppComponent implements OnInit, OnDestroy {
     const transitions = this.currentState?.checkOutInProgress ? this.pageTransitionsCheckOut : this.pageTransitionsCheckIn;
 
     // route to 'next' page
-    if (this.currentPage === 'confirm-check-in') {
-      if (this.currentState?.problemsWithBoat) {
-        this.currentPage = 'report-problem'; // If there are problems with the boat, go to the report problem page
-      }
-
+    if (this.currentPage === 'confirm-check-in' && this.currentState?.problemsWithBoat) {
+      this.currentPage = 'report-problem';
     } else {
-      this.currentPage = transitions[this.currentPage] || 'check-in-or-out'; // Default to check-in-or-out if no transition found
+      this.currentPage = transitions[this.currentPage] || 'check-in-or-out';
     }
     //this.currentPage = transitions[this.currentPage] || 'check-in-or-out';  
     console.log('Navigating to:', this.currentPage);
@@ -100,22 +101,22 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('Home button clicked');
     this.currentPage = 'check-in-or-out';
 
-    this.router.navigate(['/']);
+    this.router.navigate(['/'], { queryParams: { reset: true } });
   }
 }
-function enableNextPrev(state: AppState) {
-  console.log('Enabling Next/Previous buttons based on state:', state);
-  if (state.enableNextButton) {
-    document.getElementById('nextButton')?.removeAttribute('disabled');
-  }
-  else {
-    document.getElementById('nextButton')?.setAttribute('disabled', 'true');
-  }
-  if (state.enablePreviousButton) {
-    document.getElementById('previousButton')?.removeAttribute('disabled');
-  }
-  else {
-    document.getElementById('previousButton')?.setAttribute('disabled', 'true');
-  }
-}
+// function enableNextPrev(state: AppState) {
+//   console.log('Enabling Next/Previous buttons based on state:', state);
+//   if (state.enableNextButton) {
+//     document.getElementById('nextButton')?.removeAttribute('disabled');
+//   }
+//   else {
+//     document.getElementById('nextButton')?.setAttribute('disabled', 'true');
+//   }
+//   if (state.enablePreviousButton) {
+//     document.getElementById('previousButton')?.removeAttribute('disabled');
+//   }
+//   else {
+//     document.getElementById('previousButton')?.setAttribute('disabled', 'true');
+//   }
+// }
 
