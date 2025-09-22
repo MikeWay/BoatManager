@@ -1,5 +1,5 @@
 import { Boat } from "../model/Boat";
-import { DefectType } from "../model/defect";
+import { Defect, DefectType } from "../model/defect";
 
 export class AppState {
     engineHours: number;
@@ -37,8 +37,7 @@ export class AppState {
     public enableNextButton: boolean = false;
     public enablePreviousButton: boolean = false;
     public problemsWithBoat: boolean | undefined;
-    public defects: DefectType[] = [];
-    public defectsAdditionalInfo: string = '';
+    public defects: Defect[] = [];
     public reset(): void {
         this.reasonForCheckout = null;
         this.currentBoat = null;
@@ -53,7 +52,6 @@ export class AppState {
         this.enablePreviousButton = false;
         this.problemsWithBoat = false;
         this.defects = [];
-        this.defectsAdditionalInfo = '';
         this.engineHours = 0;
         this.returnedKey = null;
         this.refueledBoat = null;

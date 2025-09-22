@@ -52,46 +52,23 @@ async function checkInAllBoats(page) {
 
 
 
-test('Checking with multiple issues', async ({ page }) => {
-  await checkInAllBoats(page)
-  await page.goto('http://localhost:4200/');
-  await page.getByRole('radio', { name: 'Check Out' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('textbox', { name: 'Email' }).click();
-  await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
-  await page.getByRole('textbox', { name: 'Email' }).press('Tab');
-  await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
-  await page.getByRole('button', { name: 'Login' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('option', { name: 'Blue Rib' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('option', { name: 'w' }).click();
-  await page.getByRole('combobox', { name: 'Day of Month' }).locator('span').click();
-  await page.getByRole('option', { name: '14' }).click();
-  await page.getByText('Select month').click();
-  await page.getByRole('option', { name: 'July' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('option', { name: 'Sailability' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Home' }).click();
-  await page.getByRole('radio', { name: 'Check In' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('option', { name: 'Blue Rib' }).click();
-  await page.getByRole('option', { name: 'Blue Rib' }).click();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
-  await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
-  await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
-  await page.getByRole('radio', { name: 'Yes' }).check();
-  await page.getByRole('button', { name: 'Next' }).click();
-  await page.getByRole('option', { name: 'Fuel system issue' }).click();
-  await page.getByRole('option', { name: 'Electrical issue' }).click();
-  await page.getByRole('option', { name: 'Propeller problem' }).click();
-  await page.locator('div').filter({ hasText: 'Details' }).nth(3).click();
-  await page.getByRole('textbox', { name: 'Details' }).fill('The prop is bent and the nav light flashes');
-  await page.getByRole('button', { name: 'Next' }).click();
-  await expect(page.getByText('Thank You')).toBeVisible();
-  await downloadReport(page);
+test('Checkin Blue Rib with multiple issues', async ({ page }) => {
+  await doCheckinWithIssues(page, 'Blue Rib', ['Electrical issue', 'Propeller problem']);
+  //await downloadReport(page);
+});
+
+test('Checkin random boats with random issues (to generate test data)', async ({ page }) => {
+  const issues = ['Engine failure', 'Electrical issue', 'Hull damage', 'Propeller problem','Fuel system issue', 'Steering malfunction'];
+  const boatsNames = ['Yellow Rib', 'Blue Rib', 'Spare Rib', 'Grey Rib'];
+
+  // loop 10 times
+  for (let i = 0; i < 10; i++) {
+    const randomBoat = boatsNames[Math.floor(Math.random() * boatsNames.length)];
+    // randomly create 1 - 4 issues
+    const randomIssues = issues.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 4) + 1);
+    await doCheckinWithIssues(page, randomBoat, randomIssues);
+  }
+  //await downloadReport(page);
 });
 
 test('check out then in no faults - storing engine hours', async ({ page }) => {
@@ -109,6 +86,42 @@ test('check out then in no faults - storing engine hours', async ({ page }) => {
    await checkOutThenIn_NoFaults(page, '01:00', 'Other');
 
 });
+async function doCheckinWithIssues(page: Page, ribName: string, issues: string[]) {
+  await checkInAllBoats(page);
+  await page.goto('http://localhost:4200/');
+  await page.getByRole('radio', { name: 'Check Out' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+await logInIfNeeded(page);
+  await page.getByRole('option', { name: ribName }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: 'w' }).click();
+  await page.getByRole('combobox', { name: 'Day of Month' }).locator('span').click();
+  await page.getByRole('option', { name: '14' }).click();
+  await page.getByText('Select month').click();
+  await page.getByRole('option', { name: 'July' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: 'Sailability' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Home' }).click();
+  await page.getByRole('radio', { name: 'Check In' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: ribName }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
+  await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
+  await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
+  await page.getByRole('radio', { name: 'Yes' }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: 'Fuel system issue' }).click();
+  for (const issue of issues) {
+    await page.getByRole('option', { name: issue }).click();
+  }
+  await page.locator('div').filter({ hasText: 'Details' }).nth(3).click();
+  await page.getByRole('textbox', { name: 'Details' }).fill('The prop is bent and the nav light flashes');
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText('Thank You')).toBeVisible();
+}
+
 /*
 
 
@@ -162,14 +175,7 @@ async function checkOutThenIn_NoFaults(page: Page, hours: string, reason: string
   await page.goto('http://localhost:4200/');
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  if (await page.isVisible('#loginForm')) {
-    await page.getByRole('textbox', { name: 'Email' }).click();
-    await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
-    await page.getByRole('textbox', { name: 'Email' }).press('Tab');
-    await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
-    await page.getByRole('button', { name: 'Login' }).click();
-    await page.getByRole('button', { name: 'Next' }).click();
-  }
+  await logInIfNeeded(page);
   await page.getByRole('option', { name: randomRibName }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'w' }).click();
@@ -197,4 +203,15 @@ async function checkOutThenIn_NoFaults(page: Page, hours: string, reason: string
   await expect(page.getByText('Thank You')).toBeVisible();  
   await page.getByRole('button', { name: 'Home' }).click();
 
+}
+
+async function logInIfNeeded(page: Page) {
+  if (await page.isVisible('#loginForm')) {
+    await page.getByRole('textbox', { name: 'Email' }).click();
+    await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
+    await page.getByRole('textbox', { name: 'Email' }).press('Tab');
+    await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
+    await page.getByRole('button', { name: 'Login' }).click();
+    await page.getByRole('button', { name: 'Next' }).click();
+  }
 }

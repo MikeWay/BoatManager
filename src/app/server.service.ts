@@ -48,11 +48,11 @@ export class ServerService {
     }
   }
 
-  async checkInBoat(boat: Boat, user: Person, problems: DefectType[], additionalInfo: string,
+  async checkInBoat(boat: Boat, user: Person, problems: Defect[],
     engineHours: number, returnedKey: any, refueledBoat: any
   ): Promise<boolean> {
     try {
-      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-in-boat`, { boat, user, problems, additionalInfo, engineHours, returnedKey, refueledBoat }));
+      const response = await firstValueFrom(this.http.post<boolean>(`${this.baseUrl}/check-in-boat`, { boat, user, problems, engineHours, returnedKey, refueledBoat }));
       return response;
     } catch (error) {
       if (error instanceof HttpErrorResponse && error.status === 401) {

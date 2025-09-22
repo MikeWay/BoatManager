@@ -1,17 +1,16 @@
-// Class reresenting a defect. Includes boat name, description, and date reported.
+// Class reresenting a defect. References a DefectType and Additional Information
 export class Defect {
-    boatName: string;
-    description: string;
-    dateReported: Date;
-    reportBy: string;
+    defectType: DefectType;
+    additionalInfo?: string;
+    dateReported?: Date;
+    reportBy?: string;
     // Constructor to initialize the defect with boat name, description, date reported, and reporter's name
-    constructor(boatName: string, description: string, dateReported: Date, reportBy: string) {
-        this.boatName = boatName;
-        this.description = description;
+    constructor(defectType: DefectType, additionalInfo?: string, dateReported?: Date, reportBy?: string) {
+        this.defectType = defectType;
+        this.additionalInfo = additionalInfo;
         this.dateReported = dateReported;
         this.reportBy = reportBy;
     }
-
 }
 
 export class DefectType {
