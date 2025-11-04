@@ -6,11 +6,12 @@ import { Defect, DefectType } from '../../model/defect';
 import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 
 @Component({
   selector: 'app-collect-fault-details',
-  imports: [MatFormFieldModule, CommonModule, FormsModule, MatCardModule, MatButtonModule],
+  imports: [MatFormFieldModule, CommonModule, FormsModule, MatCardModule, MatButtonModule, MatInputModule],
   templateUrl: './collect-fault-details.component.html',
   styleUrl: './collect-fault-details.component.sass'
 })
