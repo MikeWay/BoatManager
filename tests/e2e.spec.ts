@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+import { adminLogon } from './e2eTestUtils';
 
 test('create and clear faults', async ({ page }) => {
-    await doAdminLogon(page);
+    await adminLogon(page);
     await page.getByRole('button', { name: 'Clear all Boat Faults -' }).click();
     await page.goto('http://localhost:4200/');
     
@@ -64,13 +65,6 @@ test('create and clear faults', async ({ page }) => {
     await expect(page.getByRole('heading', { name: 'All boats are OK!' })).toBeDefined();
 });
 
-async function doAdminLogon(page: any) {
-    await page.goto('http://localhost:3000/admin-login');
-    await page.getByRole('textbox', { name: 'Email:' }).click();
-    await page.getByRole('textbox', { name: 'Email:' }).fill('vice@exe-sailing-club.org');
-    await page.getByRole('textbox', { name: 'Email:' }).press('Tab');
-    await page.getByRole('textbox', { name: 'Password:' }).fill('password');
-    await page.getByRole('button', { name: 'Login' }).click();
-}
+
 
 

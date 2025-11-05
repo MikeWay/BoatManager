@@ -1,4 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
+import { adminLogon, checkInAllBoats, clearAllIssues, downloadReport, logInToAppIfNeeded } from './e2eTestUtils';
 
 const ribNames = ['Blue Rib', 'Yellow Rib', 'White Rib', 'Orange Rib', 'Grey Rib', 'Tornado II'];
 test('check in all boats', async ({ page }) => {
@@ -10,7 +11,7 @@ test('full checkin-checkout flow', async ({ page }) => {
   await page.goto('http://localhost:4200/');
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await logInIfNeeded(page);
+  await logInToAppIfNeeded(page);
   await page.getByRole('option', { name: 'Blue Rib' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'w' }).click();
@@ -58,18 +59,10 @@ test('full checkin-checkout flow', async ({ page }) => {
   expect(cols[6]).toBe('Fuel system issue');
   await page.getByRole('link', { name: 'Boats with Issues' }).click();
   expect(page.getByRole('cell', { name: '2' })).toBeDefined();
-  await page.getByRole('link', { name: 'View Issues' }).click();
+  await page.getByRole('row', { name: 'Blue Rib 1 View Issues' }).getByRole('link').click();
   expect(page.getByRole('cell', { name: 'Engine dies' })).toBeDefined();
   expect(page.getByRole('cell', { name: 'Steering leaking' })).toBeDefined();
 });
-
-async function checkInAllBoats(page) {
-  await adminLogon(page);
-  await page.goto('http://localhost:3000/admin');
-  await page.getByRole('button', { name: 'Check In All Boats' }).click();
-}
-
-
 
 test('Checkin Blue Rib with multiple issues', async ({ page }) => {
   await doCheckinWithIssues(page, 'Blue Rib', ['Electrical issue', 'Propeller problem']);
@@ -122,13 +115,6 @@ test('check out then in no faults - storing engine hours', async ({ page }) => {
 });
 
 
-async function adminLogon(page: any) {
-  await page.goto('http://localhost:3000/admin-login');
-  await page.getByRole('textbox', { name: 'Email:' }).fill('vice@exe-sailing-club.org');
-  await page.getByRole('textbox', { name: 'Password:' }).fill('password');
-  await page.getByRole('button', { name: 'Login' }).click();
-}
-
 async function getTotalEngineHours(page: any): Promise<number> {
   await adminLogon(page);
   await page.getByRole('link', { name: 'List Engine Hours by Use', exact: true }).click();
@@ -141,7 +127,7 @@ async function doCheckinWithIssues(page: Page, ribName: string, issues: string[]
   await page.goto('http://localhost:4200/');
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await logInIfNeeded(page);
+  await logInToAppIfNeeded(page);
   await page.getByRole('option', { name: ribName }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'w' }).click();
@@ -178,57 +164,6 @@ async function doCheckinWithIssues(page: Page, ribName: string, issues: string[]
 
 
 /*
-
-
-            "Sailability",
-            "Maintenance",
-            "Dinghy Racing",
-            "Dinghy Cruising",
-            "Cruiser Racing",
-            "Training",
-            "Other"
-            */
-async function downloadReport(page: Page): Promise<string> {
-  await page.goto('http://localhost:3000/admin-login');
-  await page.getByRole('textbox', { name: 'Email:' }).click();
-  await page.getByRole('textbox', { name: 'Email:' }).fill('vice@exe-sailing-club.org');
-  await page.getByRole('textbox', { name: 'Email:' }).press('Tab');
-  await page.getByRole('textbox', { name: 'Password:' }).fill('password');
-  await page.getByRole('button', { name: 'Login' }).click();
-  const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('link', { name: 'Generate Log Reports' }).click();
-  const download = await downloadPromise;
-  //await download.saveAs('/path/to/save/at/' + download.suggestedFilename());
-  const readStream = await download.createReadStream();
-  // readStream.on('data', (chunk) => {
-  //   // chunk seems to be a bytearray
-  //   console.log(`Received ${chunk.length} bytes of data.`);
-  //   // Process the chunk as a csv
-  //   const csvData = chunk.toString('utf-8');
-  //   csvData.split('\n').forEach((line) => {
-  //     console.log(`CSV Line: ${line}`);
-  //     console.log(`Processed CSV Data: ${csvData}`);
-  //   });
-  // });
-  // Read the stream into memory, split into lines and return the last non-empty line.
-  const chunks: Buffer[] = [];
-  for await (const chunk of readStream) {
-    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
-  }
-  const csvContent = Buffer.concat(chunks).toString('utf8');
-  const lines = csvContent.split(/\r?\n/);
-  let lastLine = '';
-  for (let i = lines.length - 1; i >= 0; i--) {
-    if (lines[i].trim() !== '') {
-      lastLine = lines[i];
-      break;
-    }
-  }
-  console.log('Last line of CSV:', lastLine);
-  return csvContent;
-}
-
-/*
 Reason should be one of:         checkout_reasons: [
             "Sailability",
             "Maintenance",
@@ -246,7 +181,7 @@ async function checkOutThenIn_NoFaults(page: Page, hours: string, reason: string
   await page.goto('http://localhost:4200/');
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await logInIfNeeded(page);
+  await logInToAppIfNeeded(page);
   await page.getByRole('option', { name: randomRibName }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'w' }).click();
@@ -284,7 +219,7 @@ test('check orange out and in with two faults', async ({ page }) => {
   await page.goto('http://localhost:4200/');
   await page.getByRole('radio', { name: 'Check Out' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
-  await logInIfNeeded(page);
+  await logInToAppIfNeeded(page);
   await page.getByRole('option', { name: 'Orange Rib' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('option', { name: 'w' }).click();
@@ -330,19 +265,4 @@ test('check orange out and in with two faults', async ({ page }) => {
   expect(page.getByRole('cell', { name: 'Steering leaking' })).toBeDefined();
 });
 
-async function logInIfNeeded(page: Page) {
-  if (await page.isVisible('#loginForm')) {
-    await page.getByRole('textbox', { name: 'Email' }).click();
-    await page.getByRole('textbox', { name: 'Email' }).fill('mikeway@webwrights.co.uk');
-    await page.getByRole('textbox', { name: 'Email' }).press('Tab');
-    await page.getByRole('textbox', { name: 'Password' }).fill('rowlocks');
-    await page.getByRole('button', { name: 'Login' }).click();
-    await page.getByRole('button', { name: 'Next' }).click();
-  }
-}
 
-async function clearAllIssues(page: Page) {
-  await adminLogon(page);
-  await page.goto('http://localhost:3000/admin');
-  await page.getByRole('button', { name: 'Clear all Boat Faults - Testing Only' }).click();
-}
