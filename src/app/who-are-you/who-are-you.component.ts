@@ -104,6 +104,15 @@ export class WhoAreYouComponent implements OnInit {
 
     this.currentState = await firstValueFrom(this.stateService.currentState);
     this.currentState.enableNextButton = false;
+    if (this.currentState.currentPerson) {
+      this.familyInitial = this.currentState.currentPerson.lastName.charAt(0).toLowerCase();
+      this.day = this.currentState.currentPerson.birthDay;
+      this.month = this.currentState.currentPerson.birthMonth + '';
+      if (this.currentState.currentPerson.birthYear) {
+        this.year = this.currentState.currentPerson.birthYear;
+      }
+    }
+
 
     // fill the years array with the last 100 years
     const currentYear = new Date().getFullYear();

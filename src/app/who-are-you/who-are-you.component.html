@@ -9,7 +9,7 @@
             @for(row of qwertyRows; track row; let index = $index) {
             <mat-chip-listbox aria-label="family-initial" [ngStyle]="{'width.%': keyBoardWidths[index]}" multiple="false" id="family-initial" >
                 @for(key of row; track key) {
-                <mat-chip-option (selectionChange)="onLetterChange($event)">{{ key }}</mat-chip-option>
+                <mat-chip-option (selectionChange)="onLetterChange($event)" [selected]="familyInitial === key">{{ key }}</mat-chip-option>
                 }
             </mat-chip-listbox>
             }

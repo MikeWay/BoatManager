@@ -7,7 +7,7 @@
 
 <mat-chip-listbox aria-label="Boat Selection" class="mat-mdc-chip-set-stacked">
     @for(reason of reasons; track reason) {
-        <mat-chip-option (selectionChange)="onReasonChange($event)">{{ reason }}</mat-chip-option>
+        <mat-chip-option [selected]="reason === selectedReason" [value]="reason" (selectionChange)="onReasonChange($event)">{{ reason }}</mat-chip-option>
     }
 </mat-chip-listbox>
 </mat-card-content>

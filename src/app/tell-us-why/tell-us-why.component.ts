@@ -15,7 +15,7 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './tell-us-why.component.sass'
 })
 export class TellUsWhyComponent implements OnInit {
-  private selectedReason: string | null = null;
+  public selectedReason: string | null = null;
   private currentState: AppState | undefined;
   public reasons: string[] = [];
   constructor(public stateService: StateService) { }
@@ -38,6 +38,7 @@ export class TellUsWhyComponent implements OnInit {
     this.reasons = environment.checkout_reasons;
     this.currentState = await firstValueFrom(this.stateService.currentState);
     this.currentState.enableNextButton = false;    
+    this.selectedReason = this.currentState.reasonForCheckout || null;
   }
 
 

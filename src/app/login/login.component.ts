@@ -15,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class LoginComponent {
     form:FormGroup;
+    hostname: string = window.location.hostname;
 
     constructor(private fb:FormBuilder, 
                  private authService: AuthService, 

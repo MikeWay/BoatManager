@@ -1,5 +1,10 @@
-<p>You should only see this form if accessing the application from a new device.</p>
-<p>There will eventually be a secure password but for now just use "rowlocks" and your email address</p>
+@if(hostname === 'localhost'){
+<ng-container >
+    <p>You should only see this form if accessing the application from a new device.</p>
+    <p>There will eventually be a secure password but for now just use "rowlocks" and your email address</p>
+</ng-container>
+}
+
 <form [formGroup]="form" id="loginForm">
     <mat-card>
         <mat-card-header>

@@ -24,6 +24,7 @@ export class CheckOutCompleteComponent implements OnInit {
 
     this.currentState = await firstValueFrom(this.stateService.currentState);
     this.currentState.enableNextButton = false;
+    this.currentState.enablePreviousButton = false;
     this.boatName = this.currentState.currentBoat?.name || 'Unknown Boat';
     this.userName = `${this.currentState.currentPerson?.firstName} ${this.currentState.currentPerson?.lastName}` || 'Unknown User';
     this.reason = this.currentState.reasonForCheckout || 'No reason provided';
