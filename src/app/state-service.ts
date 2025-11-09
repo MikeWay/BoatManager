@@ -20,7 +20,7 @@ export class StateService {
   }
 
   resetState() {
-    this.appState = new AppState();
+    this.appState.reset();
     this.stateSource.next(this.appState );
   }
 }

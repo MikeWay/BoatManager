@@ -96,3 +96,28 @@ test('check that the next and previous buttons are disabled after checkout', asy
   await expect(page.getByRole('button', { name: 'Previous' })).toBeDisabled();
   
 });
+
+test('check that next button is enabled when checkout is selected after a checkout / checkin cycle', async ({ page }) => {
+  await resetAllBoats(page);
+  await openAppAndChooseCheckOut(page);
+
+  await selectBoatAndUser(page, 'Spare Rib', 'w');
+  await selectDate(page, '14', 'July');
+  await page.getByRole('option', { name: 'Dinghy Racing' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+
+  await page.getByRole('button', { name: 'Home' }).click();
+  await page.getByRole('radio', { name: 'Check In' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('option', { name: 'Spare Rib' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
+  await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
+  await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
+  await page.getByRole('textbox', { name: 'Engine Hours' }).click();
+  await page.getByRole('radio', { name: 'No' }).check();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Home' }).click();
+  await page.getByRole('radio', { name: 'Check Out' }).click();
+  await expect(page.getByRole('button', { name: 'Next' })).toBeEnabled();
+});

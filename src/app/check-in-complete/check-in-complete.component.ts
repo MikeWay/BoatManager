@@ -3,6 +3,8 @@ import { MatCardModule } from "@angular/material/card";
 import { Router } from '@angular/router';
 import { AuthenticationException, ServerService } from '../server.service';
 import { StateService } from '../state-service';
+import { AppState } from '../app-state';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-check-in-complete',
@@ -11,21 +13,24 @@ import { StateService } from '../state-service';
   styleUrl: './check-in-complete.component.sass'
 })
 export class CheckInCompleteComponent implements OnInit {
+
+  currentState: AppState | null = null;
+  
   constructor(private stateService: StateService, private server: ServerService, private router: Router) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Perform any initialization logic here
     console.log('CheckInCompleteComponent initialized');
-    this.stateService.currentState.subscribe(async (currentState) => {
-      currentState.enableNextButton = false;
+    this.currentState = await firstValueFrom(this.stateService.currentState);
+    this.currentState.enableNextButton = false;
 
 
       try {
         // Do the actual check-in
-        if (currentState.currentBoat && currentState.currentBoat.checkedOutTo) {
-          const success = await this.server.checkInBoat(currentState.currentBoat, currentState.currentBoat.checkedOutTo, 
-              currentState.defects,  
-              currentState.engineHours, currentState.returnedKey, currentState.refueledBoat);
+        if (this.currentState && this.currentState.currentBoat && this.currentState.currentBoat.checkedOutTo) {
+          const success = await this.server.checkInBoat(this.currentState.currentBoat, this.currentState.currentBoat.checkedOutTo, 
+              this.currentState.defects,  
+              this.currentState.engineHours, this.currentState.returnedKey, this.currentState.refueledBoat);
           if (success) {
             console.log('Check-in successful');
           } else {
@@ -38,7 +43,7 @@ export class CheckInCompleteComponent implements OnInit {
           this.router.navigate(['/login']);
         }
       }
-    });
+    };
   }
 
-}
+

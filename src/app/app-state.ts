@@ -7,14 +7,13 @@ export class AppState {
   refueledBoat: any;
 
     constructor() {
-
         this.reasonForCheckout = null;
         this.currentBoat = null;
         this.currentLog = null;
-        this.currentPerson = null;      
+        this.currentPerson = null;
         this.isLoading = false;
         this.error = null;
-         this.checkOutInProgress = undefined;
+        this.checkOutInProgress = undefined;
         this.enableNextButton = false;
         this.enablePreviousButton = false;
         this.problemsWithBoat = false;
@@ -38,6 +37,8 @@ export class AppState {
     public enablePreviousButton: boolean = false;
     public problemsWithBoat: boolean | undefined;
     public defects: Defect[] = [];
+
+
     public reset(): void {
         this.reasonForCheckout = null;
         this.currentBoat = null;

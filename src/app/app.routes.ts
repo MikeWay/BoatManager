@@ -8,9 +8,11 @@ import { LoginComponent } from './login/login.component';
 import { ConfirmCheckInComponent } from './confirm-check-in/confirm-check-in.component';
 import { ReportProblemComponent } from './report-problem/report-problem.component';
 import { CheckInCompleteComponent } from './check-in-complete/check-in-complete.component';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
     { path: '', component: CheckInOrOutComponent },
+    { path: 'Home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
     { path: 'check-in-or-out', component: CheckInOrOutComponent },
     { path: 'boat-list', component: BoatListComponent },

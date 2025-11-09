@@ -101,7 +101,7 @@ export class AppComponent implements OnInit, OnDestroy {
     console.log('Home button clicked');
     this.currentPage = 'check-in-or-out';
 
-    this.router.navigate(['/'], { queryParams: { reset: true } });
+    this.router.navigate(['/Home']);
   }
 }
 // function enableNextPrev(state: AppState) {
