@@ -151,6 +151,7 @@ test('check out then in no faults - storing engine hours', async ({ page }) => {
   // Helper wrapper: do a checkout + checkin for a random rib with provided hours & reason
   async function checkoutThenIn(hours: string, reason: string) {
     const randomRibName = ribNames[Math.floor(Math.random() * ribNames.length)];
+    console.log(`Checking out and in ${randomRibName} with ${hours} hours for reason ${reason}`);
     await checkInAllBoats(page);
     await checkoutFlow(page, randomRibName, reason);
     // when checking in, mark engine hours and no faults
