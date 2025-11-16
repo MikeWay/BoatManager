@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "/home/mjrw/workNode/RibMan/nodejs-server/public", //dist/boat-manager
+            "outputPath": "server/public",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
