@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build-all": "npm run build && npm run build-server",
+    "build": "npm install && ng build",
     "build-server": "cd server && npm install && npm run build",
     "build-server-prod": "cd server && npm install && npm run build:prod",
     "watch": "ng build --watch --configuration development",
