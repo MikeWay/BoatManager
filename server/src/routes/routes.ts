@@ -119,7 +119,7 @@ function checkIfAdminAuthenticated(
         console.log('Unauthorized: JWT not found');
         throw new Error('NOT-ADMIN');
     }
-    // Verify the JWT token
+    // Verify the JWT tokenNOT-ADMIN
     jwt.verify(
         authCookie,
         RSA_PUBLIC_KEY,
@@ -139,7 +139,7 @@ function checkIfAdminAuthenticated(
             }
             if (user && user.email_address) {
                 if (!dao.tokenStore.has(user.email_address)) {
-                    console.error('Token not found in tokenStore:', authCookie);
+                    console.error('Token  not found in tokenStore:', authCookie);
                     throw new Error('NOT-ADMIN');
                 }
             }
