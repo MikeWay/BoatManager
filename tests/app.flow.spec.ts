@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { adminLogon, logInToAppIfNeeded } from './e2eTestUtils';
+import { adminLogon, checkInAllBoats, logInToAppIfNeeded } from './e2eTestUtils';
 
 const ADMIN_URL = 'http://localhost:3000/admin';
 const APP_URL = 'http://localhost:4200/';
@@ -32,6 +32,7 @@ async function selectDate(page: Page, day: string, month: string) {
 }
 
 test('check the e2e flow for check out (leaves Spare Rib checked out)', async ({ page }) => {
+  await checkInAllBoats(page);
   await resetAllBoats(page);
   await openAppAndChooseCheckOut(page);
 
@@ -114,7 +115,14 @@ test('check that next button is enabled when checkout is selected after a checko
   await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
   await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
   await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
-  await page.getByRole('textbox', { name: 'Engine Hours' }).click();
+  
+  await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
+  await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
+  await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
+  
+  await page.getByRole('spinbutton', { name: 'Minutes' }).click();
+  await page.getByRole('spinbutton', { name: 'Minutes' }).click();
+  
   await page.getByRole('radio', { name: 'No' }).check();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Home' }).click();

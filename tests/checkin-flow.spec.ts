@@ -45,8 +45,34 @@ async function checkinFlow(page: Page, ribName: string, opts?: { engineHours?: s
     await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
   }
   if (opts?.engineHours) {
-    await page.getByRole('textbox', { name: 'Engine Hours' }).click();
-    await page.getByRole('textbox', { name: 'Engine Hours' }).fill(opts.engineHours);
+    await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
+
+    const raw = opts.engineHours!;
+    let hoursNum = 0;
+    let minutesNum = 0;
+
+    if (raw.includes(':')) {
+      const [h, m] = raw.split(':').map((s) => s.trim());
+      hoursNum = parseInt(h, 10) || 0;
+      minutesNum = parseInt(m, 10) || 0;
+    } else {
+      const n = parseFloat(raw);
+      if (!isNaN(n)) {
+        hoursNum = Math.floor(n);
+        minutesNum = Math.round((n - hoursNum) * 60);
+        if (minutesNum === 60) {  
+          hoursNum += 1;
+          minutesNum = 0;
+        }
+      }
+    }
+
+    const hoursStr = String(hoursNum).padStart(2, '0');
+    const minutesStr = String(minutesNum).padStart(2, '0');
+
+    await page.getByRole('spinbutton', { name: 'Engine Hours' }).fill(hoursStr);
+    await page.getByRole('spinbutton', { name: 'Minutes' }).click();
+    await page.getByRole('spinbutton', { name: 'Minutes' }).fill(minutesStr);
   }
   // If there are issues, pick Yes, otherwise No
   if (issues.length > 0) {
@@ -193,7 +219,8 @@ test('check orange out and in with two faults', async ({ page }) => {
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('checkbox', { name: 'I am Mike Way.' }).check();
   await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
-  await page.getByRole('textbox', { name: 'Engine Hours' }).click();
+  await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
+
   // indicate there are issues
   await page.getByRole('radio', { name: 'Yes' }).check();
   await page.getByRole('button', { name: 'Next' }).click();

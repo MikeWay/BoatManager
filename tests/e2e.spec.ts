@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { adminLogon } from './e2eTestUtils';
+import { adminLogon, checkInAllBoats } from './e2eTestUtils';
 
 const APP_URL = 'http://localhost:4200/';
 const ADMIN_URL = 'http://localhost:3000/admin';
@@ -61,7 +61,7 @@ async function checkinWithFaults(page: Page) {
     await page.getByRole('checkbox', { name: 'I have returned the key.' }).check();
     await page.getByRole('checkbox', { name: 'I have refueled the boat.' }).check();
 
-    await page.getByRole('textbox', { name: 'Engine Hours' }).click();
+    await page.getByRole('spinbutton', { name: 'Engine Hours' }).click();
 
     await page.getByRole('radio', { name: 'Yes' }).check();
     await clickNext(page);
@@ -81,6 +81,8 @@ async function checkinWithFaults(page: Page) {
 test('create and clear faults', async ({ page }) => {
     // clear any pre-existing faults via admin
     await adminLogon(page);
+    await checkInAllBoats(page);
+    await page.goto('http://localhost:3000/admin');
     await page.getByRole('button', { name: /Clear all Boat Faults/i }).click();
 
     // create a booking with faults

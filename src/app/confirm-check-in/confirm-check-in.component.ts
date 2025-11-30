@@ -27,7 +27,8 @@ problemsWithBoat: any;
 returnedKey: any;
 refueledBoat: any;
 iAmTheUser: any;
-engineHours: string = '0:00';
+engineHours: number = 0;
+engineMinutes: number = 0;
 
   constructor(private stateService: StateService, private router: Router) {}
 
@@ -57,10 +58,10 @@ engineHours: string = '0:00';
     if (this.currentState) {
       // Convert engineHours string (e.g., "2:30") to a number (e.g., 2.5)
       if (this.engineHours) {
-        const [hoursStr, minutesStr] = this.engineHours.split(':');
-        const hours = parseInt(hoursStr, 10) || 0;
-        const minutes = parseInt(minutesStr, 10) || 0;
-        this.currentState.engineHours = hours + minutes / 60;
+            // const [hoursStr, minutesStr] = this.engineHours.split(':');
+            // const hours = parseInt(hoursStr, 10) || 0;
+            // const minutes = parseInt(minutesStr, 10) || 0;
+        this.currentState.engineHours = this.engineHours + this.engineMinutes / 60;
       } else {
         this.currentState.engineHours = 0;
       }
