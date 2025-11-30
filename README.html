@@ -2,7 +2,7 @@
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>BoatManager</title>
+            <title>Boat Manager</title>
             <style>
 /* From extension vscode.github */
 /*---------------------------------------------------------------------------------------------
@@ -138,42 +138,19 @@
         
         </head>
         <body class="vscode-body vscode-light">
-            <h1 id="boatmanager">BoatManager</h1>
-<p>This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a> version 18.0.5.</p>
-<h2 id="development-server">Development server</h2>
-<p>Run <code>ng serve</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The application will automatically reload if you change any of the source files.</p>
-<h2 id="code-scaffolding">Code scaffolding</h2>
-<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
-<h2 id="build">Build</h2>
-<p>Run <code>ng build</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory.</p>
-<h2 id="running-unit-tests">Running unit tests</h2>
-<p>Run <code>ng test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
-<h2 id="running-end-to-end-tests">Running end-to-end tests</h2>
-<p>Run <code>ng e2e</code> to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.</p>
-<h2 id="further-help">Further help</h2>
-<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://angular.dev/tools/cli">Angular CLI Overview and Command Reference</a> page.</p>
-<h2 id="flow---checkin">Flow - checkin</h2>
-<p>Check in flow:</p>
-<ul>
-<li>Select check - in</li>
-<li>Display list of checked - out boats
-<ul>
-<li>User selectes one</li>
-</ul>
-</li>
-<li>Confirmation Screen - did you check this boat out?
-<ul>
-<li>Yes - continue</li>
-<li>No - who are you and why are you checking it in</li>
-</ul>
-</li>
-<li>Report any issues
-<ul>
-<li>Confirm fuel and key return</li>
-</ul>
-</li>
-<li>Complete check - in</li>
-</ul>
+            <h1 id="boat-manager">Boat Manager</h1>
+<p>This project contains both an Angular App and a NodeJS server which provides both API support and an Administration interface</p>
+<p>The Angular app is documented in ./README-App.md
+The NodeJS server in ./server/README.md</p>
+<h1 id="build-it-all">Build it all</h1>
+<p>Once the code is cloned from it's repository you should be able to build using
+<strong>npm run build-all</strong></p>
+<h1 id="web-site-structure">Web Site Structure</h1>
+<p>Currently the built server code is in ./server/dist with the app deployed into ./server/public and the views (ejs) in ./server/views</p>
+<h1 id="server-deployment">Server Deployment</h1>
+<p>When deployed the server is executed as a NodeJS app running with a tool called <strong>forever</strong> which ensures the process is restarted if it dies. The server runs on port 3000.</p>
+<p>Apache2 is configured to forward requests to the server on 3000</p>
+<p>The Angular app is in the ./server/public directory.</p>
 
             
             

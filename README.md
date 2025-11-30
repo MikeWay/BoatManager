@@ -1,39 +1,21 @@
-# BoatManager
+# Boat Manager
+This project contains both an Angular App and a NodeJS server which provides both API support and an Administration interface
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.5.
+The Angular app is documented in ./README-App.md
+The NodeJS server in ./server/README.md
 
-## Development server
+# Build it all
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Once the code is cloned from it's repository you should be able to build using
+**npm run build-all**
 
-## Code scaffolding
+# Web Site Structure
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Currently the built server code is in ./server/dist with the app deployed into ./server/public and the views (ejs) in ./server/views
 
-## Build
+# Server Deployment
+When deployed the server is executed as a NodeJS app running with a tool called **forever** which ensures the process is restarted if it dies. The server runs on port 3000.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Apache2 is configured to forward requests to the server on 3000
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-## Flow - checkin
-Check in flow:
-- Select check - in
-- Display list of checked - out boats
-  - User selectes one
-- Confirmation Screen - did you check this boat out?
-  - Yes - continue
-  - No - who are you and why are you checking it in
-- Report any issues
-  - Confirm fuel and key return
-- Complete check - in
+The Angular app is in the ./server/public directory.
