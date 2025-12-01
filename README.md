@@ -25,4 +25,6 @@ To update:
 2. cd BoatManager
 3. ./stop.sh
 4. git pull
-5. npm run build-all:prod
+5. npm run build-all-prod
+6. ./start.sh
+7. Verify running at https://ribmanager.exe-sailing-club.org/
