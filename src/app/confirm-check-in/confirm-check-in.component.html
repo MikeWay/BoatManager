@@ -33,7 +33,7 @@
             </mat-form-field>
             <mat-form-field appearance="fill" style="width: 48%;">
             <mat-label>Minutes</mat-label>
-            <input matInput type="number" [(ngModel)]="engineMinutes" min="0" max="59" placeholder="Minutes" (ngModelChange)="modelChange()">
+            <input matInput type="number" [(ngModel)]="engineMinutes" min="0" max="59" step="5" placeholder="Minutes" (ngModelChange)="modelChange()">
             </mat-form-field>
         </div>
         <p>Were there any problems with the boat?</p>
