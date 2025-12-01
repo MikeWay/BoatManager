@@ -19,3 +19,10 @@ When deployed the server is executed as a NodeJS app running with a tool called 
 Apache2 is configured to forward requests to the server on 3000
 
 The Angular app is in the ./server/public directory.
+
+To update:
+1. Connect to the server
+2. cd BoatManager
+3. ./stop.sh
+4. git pull
+5. npm run build-all:prod

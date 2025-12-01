@@ -151,6 +151,14 @@ The NodeJS server in ./server/README.md</p>
 <p>When deployed the server is executed as a NodeJS app running with a tool called <strong>forever</strong> which ensures the process is restarted if it dies. The server runs on port 3000.</p>
 <p>Apache2 is configured to forward requests to the server on 3000</p>
 <p>The Angular app is in the ./server/public directory.</p>
+<p>To update:</p>
+<ol>
+<li>Connect to the server</li>
+<li>cd BoatManager</li>
+<li>./stop.sh</li>
+<li>git pull</li>
+<li>npm run build-all:prod</li>
+</ol>
 
             
             
