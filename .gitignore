@@ -42,8 +42,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Server config (contains credentials — use config.json.example as a template)
+# Server config / secrets (contains credentials — use *.example files as templates)
 server/config.json
+server/set-smtp-env.sh
 
 # Playwright
 node_modules/
