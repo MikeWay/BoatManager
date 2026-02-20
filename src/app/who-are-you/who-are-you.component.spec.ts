@@ -47,9 +47,9 @@ it('should handle undefined person from server in contentChanged', async () => {
   component.day = 1;
   component.currentState = { enableNextButton: true } as any;
   spyOn(component['server'], 'checkPerson').and.returnValue(Promise.resolve(null));
-  spyOn(console, 'error');
+  spyOn(console, 'warn');
   await component.contentChanged();
-  expect(console.error).toHaveBeenCalledWith('Error checking person');
+  expect(console.warn).toHaveBeenCalledWith('No person found with the provided details');
 });
 
 it('should handle no person found from server in contentChanged', async () => {
@@ -68,19 +68,18 @@ it('should handle no person found from server in contentChanged', async () => {
   expect(component['stateService'].updateState).toHaveBeenCalledWith(component.currentState!);
 });
 
-it('should update state and show snackbar when person is found in contentChanged', async () => {
+it('should update state when person is found in contentChanged', async () => {
   const person = new Person('99','John', 'Doe', 1,2);
   const mockState = new AppState();
   component.familyInitial = 'A';
   component.month = 'January';
   component.day = 1;
   component.currentState = mockState as AppState;
-  spyOn(component['server'], 'checkPerson').and.returnValue(Promise.resolve(person));
+  spyOn(component['server'], 'checkPerson').and.returnValue(Promise.resolve([person]));
   spyOn(component['stateService'], 'updateState');
-  const snackBarSpy = spyOn(component['_snackBar'], 'open');
   await component.contentChanged();
   expect(component.currentState.currentPerson).toEqual(person);
-  expect(snackBarSpy).toHaveBeenCalledWith('Hi John Doe', 'Close');
+  expect(component.currentState.enableNextButton).toBeTrue();
   expect(component['stateService'].updateState).toHaveBeenCalledWith(component.currentState);
 });
 });
