@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { Person } from "../model/Person";
 import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
+import { sendFaultNotificationEmail } from '../email/emailService';
 
 
 // write the current directory to the console
@@ -79,6 +80,14 @@ class ApiServer {
 
       // Save the log entry
       dao.logManager.saveLogEntry(logEntry);
+
+      // Notify training team if faults were reported
+      if (defects.length > 0) {
+        const personName = `${checkInByUser.firstName} ${checkInByUser.lastName}`;
+        sendFaultNotificationEmail(boat.name, defects, personName, engineHours)
+          .catch(err => console.error('Failed to send fault notification email:', err));
+      }
+
       return res.status(200).json({ message: "Boat checked in successfully" });
     } catch (error) {
       console.error("Error checking in boat:", error);
