@@ -12,6 +12,7 @@ export const environment = {
             "Dinghy Cruising",
             "Cruiser Racing",
             "Training",
+            "Juniors",
             "Other"
         ],
         region: 'eu-west-1', // Default AWS region
