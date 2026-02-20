@@ -19,11 +19,11 @@ export class AdminPerson {
 
     }
 
-    async setPassword(password: string): Promise<void> {
-        await this.setPasswordHash(password);
+    async setPassword(password: string): Promise<string> {
+        return await this.setPasswordHash(password);
     }
 
-    private async setPasswordHash(password: string): Promise<void> {
+    private async setPasswordHash(password: string): Promise<string> {
         const salt = crypto.randomBytes(16).toString('hex');
         const hash = await new Promise<string>((resolve, reject) => {
             crypto.scrypt(password, salt, 64, (err, derivedKey) => {
@@ -32,6 +32,7 @@ export class AdminPerson {
             });
         });
         this.passwordHash = hash;
+        return hash;
     }
 
     async validatePassword(password: string): Promise<boolean> {
