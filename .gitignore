@@ -42,6 +42,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Server config (contains credentials — use config.json.example as a template)
+server/config.json
+
 # Playwright
 node_modules/
 /test-results/

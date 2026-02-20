@@ -1,0 +1,17 @@
+{
+    "checkout_reasons": [
+        "Sailability",
+        "Maintenance",
+        "Dinghy Racing",
+        "Dinghy Cruising",
+        "Cruiser Racing",
+        "Training",
+        "Juniors",
+        "Other"
+    ],
+    "smtp_host": "your.smtp.server",
+    "smtp_port": 587,
+    "smtp_user": "your-smtp-username",
+    "smtp_pass": "your-smtp-password",
+    "smtp_from": "Boat Manager <noreply@exe-sailing-club.org>"
+}
