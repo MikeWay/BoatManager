@@ -1,30 +1,123 @@
-# Boat Manager
-This project contains both an Angular App and a NodeJS server which provides both API support and an Administration interface
+# BoatManager
 
-The Angular app is documented in ./README-App.md
-The NodeJS server in ./server/README.md
+A full-stack web application for managing boat check-ins and check-outs at Exe Sailing Club. The system tracks boat availability, records who has taken each boat and why, logs engine hours, and captures defect reports.
 
-# Build it all
+**Production URL:** https://ribmanager.exe-sailing-club.org/
 
-Once the code is cloned from it's repository you should be able to build using
-**npm run build-all**
+---
 
-# Web Site Structure
+## Architecture
 
-Currently the built server code is in ./server/dist with the app deployed into ./server/public and the views (ejs) in ./server/views
+```
+BoatManager/
+├── src/                  # Angular 20 frontend (client)
+├── server/               # Node.js/Express backend
+│   ├── src/              # TypeScript source
+│   ├── public/           # Built Angular app (served as static files)
+│   ├── views/            # EJS templates (admin interface)
+│   └── dist/             # Compiled server code
+├── tests/                # Playwright end-to-end tests
+└── start.sh / stop.sh    # Server process control
+```
 
-# Server Deployment
-When deployed the server is executed as a NodeJS app running with a tool called **forever** which ensures the process is restarted if it dies. The server runs on port 3000.
+The Angular app is built into `server/public/` and served by the Express server as static files. The Express server also exposes a REST API (`/api/*`) and a server-rendered admin interface (`/admin/*`).
 
-Apache2 is configured to forward requests to the server on 3000
+---
 
-The Angular app is in the ./server/public directory.
+## Tech Stack
 
-To update:
-1. Connect to the server
-2. cd BoatManager
-3. ./stop.sh
-4. git pull
-5. npm run build-all-prod
-6. ./start.sh
-7. Verify running at https://ribmanager.exe-sailing-club.org/
+| Layer | Technology |
+|---|---|
+| Frontend | Angular 20, Angular Material (azure-blue theme), TypeScript |
+| Backend | Node.js, Express 4, TypeScript |
+| Database | AWS DynamoDB (6 tables, eu-west-1) |
+| Auth (API) | JWT RS256 (RSA key pair) |
+| Auth (Admin) | JWT in cookie + server-side token store |
+| Process manager | forever |
+| Reverse proxy | Apache2 → port 3000 |
+| Unit tests | Karma/Jasmine (frontend), Jest (backend) |
+| E2E tests | Playwright |
+
+---
+
+## Quick Start (Development)
+
+### Prerequisites
+
+- Node.js (LTS)
+- AWS credentials configured with access to the DynamoDB tables
+- RSA key pair in `server/src/keys/` (`private.key`, `public.key`)
+
+### Install and build everything
+
+```bash
+npm run build-all
+```
+
+This installs dependencies and builds both the Angular app and the server.
+
+### Run the backend server
+
+```bash
+npm run start-server
+```
+
+The server listens on **port 3000**. The Angular app is served from `server/public/`.
+
+### Run the Angular dev server (frontend only)
+
+```bash
+npm start
+```
+
+Navigate to `http://localhost:4200/`. The app will reload automatically on file changes.
+
+---
+
+## Build Commands
+
+| Command | Description |
+|---|---|
+| `npm run build-all` | Install deps + build frontend + build server (development) |
+| `npm run build-all-prod` | Install deps + build frontend + build server (production, optimised) |
+| `npm run build` | Build Angular app only |
+| `npm run build-server` | Build Node.js server only |
+| `npm run build-server-prod` | Build Node.js server with production config |
+| `npm run start-server` | Install server deps and start the server |
+| `npm test` | Run Angular unit tests |
+| `npm run e2e` | Run Playwright end-to-end tests |
+
+---
+
+## Deployment
+
+The server runs as a Node.js process managed by **forever**, behind an **Apache2** reverse proxy.
+
+### Update procedure
+
+```bash
+# 1. SSH into the server
+# 2. Navigate to the project directory
+cd BoatManager
+
+# 3. Stop the running server
+./stop.sh
+
+# 4. Pull latest code
+git pull
+
+# 5. Build everything for production
+npm run build-all-prod
+
+# 6. Start the server
+./start.sh
+
+# 7. Verify at https://ribmanager.exe-sailing-club.org/
+```
+
+---
+
+## Further Documentation
+
+- **Frontend (Angular app):** [README- App.md](./README-%20App.md)
+- **Backend (Node.js server):** [server/README.md](./server/README.md)
