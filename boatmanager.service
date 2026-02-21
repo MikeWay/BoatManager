@@ -1,0 +1,16 @@
+[Unit]
+Description=BoatManager Application Server
+After=network.target
+
+[Service]
+Type=simple
+User=bitnami
+WorkingDirectory=/home/bitnami/BoatManager
+ExecStart=/bin/bash -c 'source /home/bitnami/BoatManager/server/set-smtp-env.sh && exec node /home/bitnami/BoatManager/server/dist/server.js'
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

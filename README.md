@@ -91,7 +91,7 @@ Navigate to `http://localhost:4200/`. The app will reload automatically on file 
 
 ## Deployment
 
-The server runs as a Node.js process managed by **forever**, behind an **Apache2** reverse proxy.
+The server runs as a Node.js process managed by **systemd**, behind an **Apache2** reverse proxy.
 
 ### First-time setup
 
@@ -105,6 +105,22 @@ cp server/set-smtp-env.sh.example server/set-smtp-env.sh
 `server/set-smtp-env.sh` is gitignored — it will never be overwritten by `git pull`.
 Do **not** delete or recreate it during updates.
 
+#### Install the systemd service (once only)
+
+```bash
+# Copy the service file and enable it to start on boot
+sudo cp ~/BoatManager/boatmanager.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable boatmanager
+sudo systemctl start boatmanager
+
+# Check it's running
+sudo systemctl status boatmanager
+```
+
+After this, the server will start automatically on boot and restart on crash.
+Use `sudo systemctl start/stop/restart/status boatmanager` to manage it.
+
 ### Update procedure
 
 ```bash
@@ -113,7 +129,7 @@ Do **not** delete or recreate it during updates.
 cd BoatManager
 
 # 3. Stop the running server
-./stop.sh
+sudo systemctl stop boatmanager
 
 # 4. Pull latest code (set-smtp-env.sh is gitignored and will not be affected)
 git pull
@@ -124,8 +140,8 @@ chmod +x st*.sh
 # 6. Build everything for production
 npm run build-all-prod
 
-# 7. Start the server (automatically sources server/set-smtp-env.sh)
-./start.sh
+# 7. Start the server
+sudo systemctl start boatmanager
 
 # 8. Verify at https://ribmanager.exe-sailing-club.org/
 ```
