@@ -93,6 +93,18 @@ Navigate to `http://localhost:4200/`. The app will reload automatically on file 
 
 The server runs as a Node.js process managed by **forever**, behind an **Apache2** reverse proxy.
 
+### First-time setup
+
+After cloning, create the SMTP credentials file from the example template:
+
+```bash
+cp server/set-smtp-env.sh.example server/set-smtp-env.sh
+# Edit server/set-smtp-env.sh and fill in the real SMTP credentials
+```
+
+`server/set-smtp-env.sh` is gitignored — it will never be overwritten by `git pull`.
+Do **not** delete or recreate it during updates.
+
 ### Update procedure
 
 ```bash
@@ -103,13 +115,13 @@ cd BoatManager
 # 3. Stop the running server
 ./stop.sh
 
-# 4. Pull latest code
+# 4. Pull latest code (set-smtp-env.sh is gitignored and will not be affected)
 git pull
 
 # 5. Build everything for production
 npm run build-all-prod
 
-# 6. Start the server
+# 6. Start the server (automatically sources server/set-smtp-env.sh)
 ./start.sh
 
 # 7. Verify at https://ribmanager.exe-sailing-club.org/
