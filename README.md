@@ -118,13 +118,16 @@ cd BoatManager
 # 4. Pull latest code (set-smtp-env.sh is gitignored and will not be affected)
 git pull
 
-# 5. Build everything for production
+# 5. Ensure shell scripts are executable
+chmod +x st*.sh
+
+# 6. Build everything for production
 npm run build-all-prod
 
-# 6. Start the server (automatically sources server/set-smtp-env.sh)
+# 7. Start the server (automatically sources server/set-smtp-env.sh)
 ./start.sh
 
-# 7. Verify at https://ribmanager.exe-sailing-club.org/
+# 8. Verify at https://ribmanager.exe-sailing-club.org/
 ```
 
 ---
