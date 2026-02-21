@@ -43,7 +43,6 @@ testem.log
 Thumbs.db
 
 # Server config / secrets (contains credentials — use *.example files as templates)
-server/config.json
 server/set-smtp-env.sh
 
 # Playwright
