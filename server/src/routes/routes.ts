@@ -59,6 +59,7 @@ export function setRoutes(app: any) {
     router.post('/admin/confirmDefectCleared', checkIfAdminAuthenticated, adminController.confirmDefectCleared.bind(adminController));
     router.post('/admin/clearAllBoatFaults', checkIfAdminAuthenticated, adminController.clearAllBoatFaults.bind(adminController));
     router.get('/admin/weeklyReport', checkIfAdminAuthenticated, adminController.triggerWeeklyReport.bind(adminController));
+    router.get('/admin/developerOptions', checkIfAdminAuthenticated, adminController.developerOptions.bind(adminController));
 }
 
 

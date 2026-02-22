@@ -1,58 +1,41 @@
-<div class="container mt-5">
+<h6 class="text-muted text-uppercase small mb-1 mt-2">Reports</h6>
+<ul class="list-group mb-3">
+    <li class="list-group-item">
+        <a href="/admin/report" class="btn btn-link">Generate Log Reports</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/boatsWithIssues" class="btn btn-link">Boats with Issues</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/boatsCheckedOut" class="btn btn-link">Show Boats Currently Checked Out</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/engineHoursByUse" class="btn btn-link">List Engine Hours by Use</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/engineHoursByUseByBoat" class="btn btn-link">List Engine Hours by Use for each boat</a>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/weeklyReport" class="btn btn-link">Send Weekly Report Now</a>
+    </li>
+</ul>
 
-    <ul class="list-group">
-        <li class="list-group-item">
-            <a href="/admin" class="btn btn-link">Admin Home</a>
-        </li>
-        <li class="list-group-item">
-            <a href="/admin/report" class="btn btn-link">Generate Log Reports</a>
-        </li>
-        <li class="list-group-item">
-            <a href="/admin/boatsWithIssues" class="btn btn-link">Boats with Issues</a>
-        </li>
-
-            <li class="list-group-item">
-                <a href="/admin/boatsCheckedOut" class="btn btn-link">Show Boats Currently Checked Out</a>
-            </li>
-        <li class="list-group-item">
-            <a href="/admin/listUsers" class="btn btn-link">List Admin Users</a>
-        </li>
-
-        <li class="list-group-item">
-            <a href="/admin/engineHoursByUse" class="btn btn-link">List Engine Hours by Use</a>
-        </li>   
-        <li class="list-group-item">
-            <a href="/admin/engineHoursByUseByBoat" class="btn btn-link">List Engine Hours by Use for each boat</a>
-        </li>
-        <li class="list-group-item">
-            <a href="/admin/weeklyReport" class="btn btn-link">Send Weekly Report Now</a>
-        </li>               
-        <li class="list-group-item"></li>
+<h6 class="text-muted text-uppercase small mb-1">Maintenance</h6>
+<ul class="list-group mb-3">
+    <li class="list-group-item">
+        <a href="/admin/listUsers" class="btn btn-link">Maintain Admin Users</a>
+    </li>
+    <li class="list-group-item">
         <form action="/admin/checkInAll" method="POST" style="display:inline;padding-left: 1em;">
-            <button type="submit" class="btn btn-link p-0">
-                Check In All Boats
-            </button>
+            <button type="submit" class="btn btn-link p-0">Check In All Boats</button>
         </form>
-        </li>
+    </li>
+    <li class="list-group-item">
+        <a href="/admin/loadUsers" class="btn btn-link">Upload New Users as CSV</a>
+    </li>
+</ul>
 
-    </ul>
-    <ul class="list-group mt-3" style="background-color: #FFC107;">
-        <li class="list-group-item" style="background-color: #FFC107;">
-            <a href="/admin/loadUsers" class="btn btn-link">Upload New Users as CSV</a>
-        </li>
-        <li class="list-group-item" style="background-color: #FFC107;">
-            <a href="/admin/deleteAllUsers-REMOVE-THIS" class="btn btn-link text-danger">Delete All Users -- Don't
-                do it!</a>
-        </li>
-        <li class="list-group-item" style="background-color: #FFC107;">
-            <form action="/admin/clearAllBoatFaults" method="POST" style="display:inline;padding-left: 1em;">
-                <button type="submit" class="btn btn-link p-0 text-danger">
-                    Clear all Boat Faults - Testing Only
-                </button>
-            </form>
-        </li>        
-    </ul>
-    <div class="mt-4">
-        <a href="/admin/logout" class="btn btn-outline-secondary">Log Out</a>
-    </div>
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <a href="/admin/developerOptions" class="btn btn-outline-warning btn-sm">Developer Options</a>
+    <a href="/admin/logout" class="btn btn-outline-secondary btn-sm">Log Out</a>
 </div>

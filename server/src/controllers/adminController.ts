@@ -337,6 +337,12 @@ export class AdminController {
         // load engine hours for specifc boat
     }
 
+    public developerOptions(req: Request, res: Response): void {
+        res.locals.pageBody = 'adminDeveloperOptions';
+        req.session.pageBody = res.locals.pageBody;
+        res.render('index', { title: 'Developer Options' });
+    }
+
     public async triggerWeeklyReport(req: Request, res: Response): Promise<void> {
         const recipients: string[] = Config.getInstance().get('weekly_report_recipients') ?? [];
         res.locals.pageBody = 'adminWeeklyReportSent';
