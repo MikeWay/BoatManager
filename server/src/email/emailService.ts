@@ -173,11 +173,54 @@ ${faultRows}
 <small>Boat Manager — weekly report</small>
 `.trim();
 
+    // Build CSV attachment
+    const csvLines: string[] = [];
+    csvLines.push(`Engine Hours This Year (${yearLabel})`);
+    csvLines.push('Boat,Hours');
+    for (const [id, hours] of data.yearlyHoursByBoat.entries()) {
+        const name = data.boatNameById.get(id) ?? id;
+        csvLines.push(`"${name}",${fmt(hours)}`);
+    }
+    csvLines.push(`Total,${fmt(data.yearlyTotalHours)}`);
+    csvLines.push('');
+    csvLines.push(`Engine Hours This Week (${weekLabel})`);
+    csvLines.push('Boat,Hours');
+    for (const [id, hours] of data.weeklyHoursByBoat.entries()) {
+        const name = data.boatNameById.get(id) ?? id;
+        csvLines.push(`"${name}",${fmt(hours)}`);
+    }
+    csvLines.push(`Total,${fmt(data.weeklyTotalHours)}`);
+    csvLines.push('');
+    csvLines.push('Engine Hours This Week by Reason');
+    csvLines.push('Reason,Hours');
+    for (const [reason, hours] of data.weeklyHoursByReason.entries()) {
+        csvLines.push(`"${reason}",${fmt(hours)}`);
+    }
+    csvLines.push('');
+    csvLines.push('Outstanding Faults');
+    csvLines.push('Boat,Faults');
+    if (data.boatFaults.length === 0) {
+        csvLines.push('No outstanding faults,');
+    } else {
+        for (const bf of data.boatFaults) {
+            const faults = bf.defects.map(d => {
+                const detail = d.additionalInfo ? ` - ${d.additionalInfo}` : '';
+                return `${d.defectType.name}${detail}`;
+            }).join('; ');
+            csvLines.push(`"${bf.boatName}","${faults}"`);
+        }
+    }
+    const csv = csvLines.join('\n');
+    const csvFilename = `boat-usage-report-${data.weekEnd.toISOString().slice(0, 10)}.csv`;
+
     await transporter.sendMail({
         from: process.env['SMTP_FROM'] ?? `"Boat Manager" <noreply@exe-sailing-club.org>`,
         to: recipients.join(', '),
         subject: `Weekly boat usage report — ${weekLabel}`,
         html,
+        attachments: [
+            { filename: csvFilename, content: csv, contentType: 'text/csv' },
+        ],
     });
 
     console.log(`Weekly report sent to ${recipients.join(', ')}`);

@@ -344,8 +344,17 @@ export class AdminController {
         res.render('index', { title: 'Developer Options' });
     }
 
-    public async triggerWeeklyReport(req: Request, res: Response): Promise<void> {
+    public triggerWeeklyReport(req: Request, res: Response): void {
         const recipients: string[] = Config.getInstance().get('weekly_report_recipients') ?? [];
+        res.locals.pageBody = 'adminWeeklyReportForm';
+        res.locals.defaultRecipients = recipients.join(', ');
+        req.session.pageBody = res.locals.pageBody;
+        res.render('index', { title: 'Send Weekly Report' });
+    }
+
+    public async submitWeeklyReport(req: Request, res: Response): Promise<void> {
+        const recipientsRaw: string = req.body.recipients ?? '';
+        const recipients = recipientsRaw.split(',').map((r: string) => r.trim()).filter((r: string) => r.length > 0);
         res.locals.pageBody = 'adminWeeklyReportSent';
         try {
             const data = await generateWeeklyReportData({ manualTrigger: true });
@@ -353,10 +362,10 @@ export class AdminController {
                 await sendWeeklyReport(data, recipients);
                 res.locals.reportMessage = `Weekly report sent to ${recipients.join(', ')}`;
             } else {
-                res.locals.reportMessage = 'Report generated but no recipients configured (weekly_report_recipients in config.json).';
+                res.locals.reportMessage = 'No recipients specified — report was not sent.';
             }
         } catch (err) {
-            console.error('Error triggering weekly report:', err);
+            console.error('Error sending weekly report:', err);
             res.locals.reportError = 'Failed to generate or send weekly report. Check server logs.';
         }
         res.render('index', { title: 'Weekly Report' });
