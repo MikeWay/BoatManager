@@ -1,0 +1,23 @@
+#!/bin/bash
+# Auto-increment server version by 0.01 on each commit
+
+VERSION_FILE="server/src/version.ts"
+
+# Extract current version string e.g. "1.00"
+current=$(grep -oP '(?<=VERSION = ")[^"]+' "$VERSION_FILE")
+
+if [ -z "$current" ]; then
+    echo "pre-commit: could not find VERSION in $VERSION_FILE — skipping version bump"
+    exit 0
+fi
+
+# Increment by 0.01 using awk (avoids floating-point string issues)
+new=$(awk "BEGIN { printf \"%.2f\", $current + 0.01 }")
+
+# Update the file
+sed -i "s/VERSION = \"$current\"/VERSION = \"$new\"/" "$VERSION_FILE"
+
+# Stage the updated version file
+git add "$VERSION_FILE"
+
+echo "pre-commit: version bumped $current → $new"

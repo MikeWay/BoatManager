@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { generateWeeklyReportData } from "../services/weeklyReportService";
 import { sendWeeklyReport } from "../email/emailService";
 import { Config } from "../model/Config";
+import { VERSION } from "../version";
 import { Person } from "../model/Person";
 import { RSA_PRIVATE_KEY } from "../api/server";
 import jwt from 'jsonwebtoken';
@@ -177,8 +178,8 @@ export class AdminController {
 
     public getHome(req: Request, res: Response): void {
         res.locals.pageBody = 'adminPage';
+        res.locals.version = VERSION;
         req.session.pageBody = res.locals.pageBody;
-        // render the page1 view with the usernames 
         res.render('index', { title: 'Admin' });
     }
 
