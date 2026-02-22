@@ -14,7 +14,8 @@
     "test": "ng test",
     "e2e": "npm run playwright test",
     "e2eui": "npx playwright test --ui",
-    "gentest": "npx playwright codegen http://localhost:4200"
+    "gentest": "npx playwright codegen http://localhost:4200",
+    "deploy": "./deploy.sh"
   },
   "private": true,
   "dependencies": {
