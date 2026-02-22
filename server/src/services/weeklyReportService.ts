@@ -35,8 +35,17 @@ function getWeekBounds(): { weekStart: Date; weekEnd: Date } {
     return { weekStart, weekEnd };
 }
 
-export async function generateWeeklyReportData(): Promise<WeeklyReportData> {
-    const { weekStart, weekEnd } = getWeekBounds();
+export async function generateWeeklyReportData(options?: { manualTrigger?: boolean }): Promise<WeeklyReportData> {
+    let weekStart: Date;
+    let weekEnd: Date;
+    if (options?.manualTrigger) {
+        // Manual trigger: last 7 days from now
+        weekEnd = new Date();
+        weekStart = new Date(weekEnd.getTime() - 7 * 24 * 60 * 60 * 1000);
+        weekStart.setHours(0, 0, 0, 0);
+    } else {
+        ({ weekStart, weekEnd } = getWeekBounds());
+    }
     const yearStart = new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0);
 
     // Load all engine hours in one scan

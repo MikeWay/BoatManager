@@ -339,27 +339,20 @@ export class AdminController {
 
     public async triggerWeeklyReport(req: Request, res: Response): Promise<void> {
         const recipients: string[] = Config.getInstance().get('weekly_report_recipients') ?? [];
+        res.locals.pageBody = 'adminWeeklyReportSent';
         try {
-            const data = await generateWeeklyReportData();
+            const data = await generateWeeklyReportData({ manualTrigger: true });
             if (recipients.length > 0) {
                 await sendWeeklyReport(data, recipients);
-                res.render('adminWeeklyReportSent', {
-                    title: 'Weekly Report',
-                    message: `Weekly report sent to ${recipients.join(', ')}`,
-                });
+                res.locals.reportMessage = `Weekly report sent to ${recipients.join(', ')}`;
             } else {
-                res.render('adminWeeklyReportSent', {
-                    title: 'Weekly Report',
-                    message: 'Report generated but no recipients configured (weekly_report_recipients in config.json).',
-                });
+                res.locals.reportMessage = 'Report generated but no recipients configured (weekly_report_recipients in config.json).';
             }
         } catch (err) {
             console.error('Error triggering weekly report:', err);
-            res.render('adminWeeklyReportSent', {
-                title: 'Weekly Report',
-                error: 'Failed to generate or send weekly report. Check server logs.',
-            });
+            res.locals.reportError = 'Failed to generate or send weekly report. Check server logs.';
         }
+        res.render('index', { title: 'Weekly Report' });
     }
 
     public async saveNewAdminUser(req: Request, res: Response): Promise<void> {
