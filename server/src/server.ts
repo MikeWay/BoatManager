@@ -56,7 +56,7 @@ const errorHandler: ErrorHandler = (err, req, res, next) => {
 app.use(errorHandler);
 
 // Catch-all: serve Angular's index.html for any unmatched routes (enables SPA refresh)
-app.get('*', (req: Request, res: Response) => {
+app.get('*', (_req: Request, res: Response) => {
     res.sendFile(path.resolve('public/browser/index.html'));
 });
 
