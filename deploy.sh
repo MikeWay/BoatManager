@@ -2,7 +2,7 @@
 # Deploy BoatManager to production server
 set -e
 
-SERVER="bitnami@91.203.57.7"
+SERVER="bitnami@ribmanager.exe-sailing-club.org"
 REMOTE_DIR="BoatManager"
 
 echo "==> Deploying to $SERVER..."
