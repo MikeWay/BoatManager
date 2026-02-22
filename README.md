@@ -33,7 +33,7 @@ The Angular app is built into `server/public/` and served by the Express server 
 | Database | AWS DynamoDB (6 tables, eu-west-1) |
 | Auth (API) | JWT RS256 (RSA key pair) |
 | Auth (Admin) | JWT in cookie + server-side token store |
-| Process manager | forever |
+| Process manager | systemd |
 | Reverse proxy | Apache2 → port 3000 |
 | Unit tests | Karma/Jasmine (frontend), Jest (backend) |
 | E2E tests | Playwright |
