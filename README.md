@@ -17,7 +17,7 @@ BoatManager/
 │   ├── views/            # EJS templates (admin interface)
 │   └── dist/             # Compiled server code
 ├── tests/                # Playwright end-to-end tests
-└── start.sh / stop.sh    # Server process control
+└── boatmanager.service   # systemd service definition
 ```
 
 The Angular app is built into `server/public/` and served by the Express server as static files. The Express server also exposes a REST API (`/api/*`) and a server-rendered admin interface (`/admin/*`).
