@@ -134,16 +134,13 @@ sudo systemctl stop boatmanager
 # 4. Pull latest code (set-smtp-env.sh is gitignored and will not be affected)
 git pull
 
-# 5. Ensure shell scripts are executable
-chmod +x st*.sh
-
-# 6. Build everything for production
+# 5. Build everything for production
 npm run build-all-prod
 
-# 7. Start the server
+# 6. Start the server
 sudo systemctl start boatmanager
 
-# 8. Verify at https://ribmanager.exe-sailing-club.org/
+# 7. Verify at https://ribmanager.exe-sailing-club.org/
 ```
 
 ---
