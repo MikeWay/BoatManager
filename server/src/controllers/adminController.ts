@@ -1,6 +1,9 @@
 import { dao } from "../model/dao";
 import { logManager } from "../model/LogManager";
 import { Request, Response } from 'express';
+import { generateWeeklyReportData } from "../services/weeklyReportService";
+import { sendWeeklyReport } from "../email/emailService";
+import { Config } from "../model/Config";
 import { Person } from "../model/Person";
 import { RSA_PRIVATE_KEY } from "../api/server";
 import jwt from 'jsonwebtoken';
@@ -332,6 +335,31 @@ export class AdminController {
 
     public async reportEngineHoursForBoat(req: Request, res: Response): Promise<void> {
         // load engine hours for specifc boat
+    }
+
+    public async triggerWeeklyReport(req: Request, res: Response): Promise<void> {
+        const recipients: string[] = Config.getInstance().get('weekly_report_recipients') ?? [];
+        try {
+            const data = await generateWeeklyReportData();
+            if (recipients.length > 0) {
+                await sendWeeklyReport(data, recipients);
+                res.render('adminWeeklyReportSent', {
+                    title: 'Weekly Report',
+                    message: `Weekly report sent to ${recipients.join(', ')}`,
+                });
+            } else {
+                res.render('adminWeeklyReportSent', {
+                    title: 'Weekly Report',
+                    message: 'Report generated but no recipients configured (weekly_report_recipients in config.json).',
+                });
+            }
+        } catch (err) {
+            console.error('Error triggering weekly report:', err);
+            res.render('adminWeeklyReportSent', {
+                title: 'Weekly Report',
+                error: 'Failed to generate or send weekly report. Check server logs.',
+            });
+        }
     }
 
     public async saveNewAdminUser(req: Request, res: Response): Promise<void> {

@@ -1,5 +1,6 @@
 import * as nodemailer from 'nodemailer';
 import { ReportedDefect } from '../model/defect';
+import { WeeklyReportData } from '../services/weeklyReportService';
 
 const FAULT_NOTIFICATION_EMAIL = 'training@exe-sailing-club.org';
 
@@ -89,4 +90,95 @@ ${defects.map(d => {
     });
 
     console.log(`Fault notification email sent to ${FAULT_NOTIFICATION_EMAIL} for boat ${boatName}`);
+}
+
+function fmt(n: number): string {
+    return n.toFixed(1);
+}
+
+function tableRows(map: Map<string, number>, nameById?: Map<string, string>): string {
+    const rows: string[] = [];
+    for (const [key, hours] of map.entries()) {
+        const label = nameById ? (nameById.get(key) ?? key) : key;
+        rows.push(`  <tr><td>${label}</td><td style="text-align:right">${fmt(hours)}</td></tr>`);
+    }
+    return rows.join('\n');
+}
+
+export async function sendWeeklyReport(data: WeeklyReportData, recipients: string[]): Promise<void> {
+    const smtpHost = process.env['SMTP_HOST'];
+    if (!smtpHost) {
+        console.warn('SMTP_HOST not set — skipping weekly report email');
+        return;
+    }
+    if (!recipients || recipients.length === 0) {
+        console.warn('sendWeeklyReport: no recipients — skipping');
+        return;
+    }
+
+    const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(process.env['SMTP_PORT'] ?? 587),
+        secure: Number(process.env['SMTP_PORT'] ?? 587) === 465,
+        auth: {
+            user: process.env['SMTP_USER'],
+            pass: process.env['SMTP_PASS'],
+        },
+    });
+
+    const weekLabel = `${data.weekStart.toLocaleDateString('en-GB')} – ${data.weekEnd.toLocaleDateString('en-GB')}`;
+    const yearLabel = `${data.yearStart.getFullYear()}`;
+
+    const faultRows = data.boatFaults.length === 0
+        ? '<tr><td colspan="2">No outstanding faults</td></tr>'
+        : data.boatFaults.map(bf => {
+            const defectList = bf.defects.map(d => {
+                const detail = d.additionalInfo ? ` — ${d.additionalInfo}` : '';
+                return `${d.defectType.name}${detail}`;
+            }).join('; ');
+            return `  <tr><td>${bf.boatName}</td><td>${defectList}</td></tr>`;
+        }).join('\n');
+
+    const html = `
+<h2>Weekly Boat Usage Report</h2>
+<p>Week: <strong>${weekLabel}</strong></p>
+
+<h3>1. Engine Hours This Year (${yearLabel})</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Boat</th><th>Hours</th></tr>
+${tableRows(data.yearlyHoursByBoat, data.boatNameById)}
+  <tr><td><strong>Total</strong></td><td style="text-align:right"><strong>${fmt(data.yearlyTotalHours)}</strong></td></tr>
+</table>
+
+<h3>2. Engine Hours This Week (${weekLabel})</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Boat</th><th>Hours</th></tr>
+${tableRows(data.weeklyHoursByBoat, data.boatNameById)}
+  <tr><td><strong>Total</strong></td><td style="text-align:right"><strong>${fmt(data.weeklyTotalHours)}</strong></td></tr>
+</table>
+
+<h3>3. Engine Hours This Week by Checkout Reason</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Reason</th><th>Hours</th></tr>
+${tableRows(data.weeklyHoursByReason)}
+</table>
+
+<h3>4. Outstanding Faults</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Boat</th><th>Faults</th></tr>
+${faultRows}
+</table>
+
+<hr>
+<small>Boat Manager — weekly report</small>
+`.trim();
+
+    await transporter.sendMail({
+        from: process.env['SMTP_FROM'] ?? `"Boat Manager" <noreply@exe-sailing-club.org>`,
+        to: recipients.join(', '),
+        subject: `Weekly boat usage report — ${weekLabel}`,
+        html,
+    });
+
+    console.log(`Weekly report sent to ${recipients.join(', ')}`);
 }

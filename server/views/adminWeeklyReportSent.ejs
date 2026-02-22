@@ -1,0 +1,9 @@
+<div class="container mt-5">
+    <h2>Weekly Report</h2>
+    <% if (locals.error) { %>
+        <div class="alert alert-danger"><%= error %></div>
+    <% } else { %>
+        <div class="alert alert-success"><%= message %></div>
+    <% } %>
+    <a href="/admin" class="btn btn-outline-secondary mt-3">Back to Admin</a>
+</div>

@@ -13,5 +13,6 @@
     "smtp_port": 587,
     "smtp_user": "your-smtp-username",
     "smtp_pass": "your-smtp-password",
-    "smtp_from": "Boat Manager <noreply@exe-sailing-club.org>"
+    "smtp_from": "Boat Manager <noreply@exe-sailing-club.org>",
+    "weekly_report_recipients": ["training@exe-sailing-club.org"]
 }

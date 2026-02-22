@@ -1,5 +1,6 @@
 import express from 'express';
 import { setRoutes } from './routes/routes';
+import { scheduleWeeklyReport } from './services/weeklyReportService';
 import session from 'express-session';
 import cors from 'cors';
 import audit from 'express-requests-logger'
@@ -40,6 +41,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 // Set up routes
 setRoutes(app);
+scheduleWeeklyReport();
 
 interface ErrorHandler {
   (err: Error, req: Request, res: Response, next: NextFunction): void;
