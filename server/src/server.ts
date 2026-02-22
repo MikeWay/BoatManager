@@ -5,6 +5,7 @@ import cors from 'cors';
 import audit from 'express-requests-logger'
 import { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -54,6 +55,10 @@ const errorHandler: ErrorHandler = (err, req, res, next) => {
 
 app.use(errorHandler);
 
+// Catch-all: serve Angular's index.html for any unmatched routes (enables SPA refresh)
+app.get('*', (req: Request, res: Response) => {
+    res.sendFile(path.resolve('public/browser/index.html'));
+});
 
 // Start the server
 //app.use(cors(corsOptions));
