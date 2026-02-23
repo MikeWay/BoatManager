@@ -98,6 +98,16 @@ export class ServerService {
     }
   }
 
+  async getServerVersion(): Promise<string> {
+    try {
+      const result = await firstValueFrom(this.http.get<{ version: string }>(`${this.baseUrl}/version`));
+      return result.version;
+    } catch (error) {
+      console.error('Error fetching server version:', error);
+      return '';
+    }
+  }
+
   async getCheckinReasons(): Promise<string[]> {
     try {
       return await firstValueFrom(this.http.get<string[]>(`${this.baseUrl}/checkin-reasons`));

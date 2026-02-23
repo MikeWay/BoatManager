@@ -44,6 +44,7 @@ export function setRoutes(app: any) {
     router.get('/api/checked-out-boats', checkIfAuthenticated, apiServer.getCheckedOutBoats.bind(apiServer));
     router.get('/api/defects-list', checkIfAuthenticated, apiServer.getPossibleDefectsList.bind(apiServer));
     router.get('/api/checkin-reasons', checkIfAuthenticated, apiServer.getCheckinReasons.bind(apiServer));
+    router.get('/api/version', apiServer.getVersion.bind(apiServer));
     router.post('/api/login', apiServer.login.bind(apiServer));
     router.get('/admin-login', adminController.adminLogin.bind(adminController));
     router.post('/admin/login', adminController.login.bind(adminController));

@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { StateService } from './state-service';
 import { AppState } from './app-state';
+import { ServerService } from './server.service';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private currentPage: string = 'check-in-or-out'; // The current page in the state machine
   public currentState: AppState | undefined;
-  public version: string = environment.version; // Default version, can be updated from environment
+  public version: string = environment.version;
+  public showVersionMismatch: boolean = false;
 
   // Note: these transtion names MUST match the route names in app.routes.ts
   private pageTransitionsCheckOut: { [key: string]: string } = {
@@ -40,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   title = 'BoatManager';
 
-  constructor(private router: Router, private stateService: StateService) { }
+  constructor(private router: Router, private stateService: StateService, private serverService: ServerService) { }
   ngOnDestroy(): void {
     // Cleanup logic if needed
     console.log('AppComponent destroyed');
@@ -50,6 +52,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    // Check server version matches client version
+    this.serverService.getServerVersion().then(serverVersion => {
+      if (serverVersion && serverVersion !== environment.version) {
+        this.showVersionMismatch = true;
+      }
+    });
+
     // Initialize the state service or any other necessary setup
     this.stateService.currentState.subscribe(state => {
       // Handle state changes if needed

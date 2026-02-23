@@ -17,7 +17,12 @@ new=$(awk "BEGIN { printf \"%.2f\", $current + 0.01 }")
 # Update the file
 sed -i "s/VERSION = \"$current\"/VERSION = \"$new\"/" "$VERSION_FILE"
 
-# Stage the updated version file
-git add "$VERSION_FILE"
+ENV_FILE="src/environments/environment.ts"
+
+# Update version in Angular environment file
+sed -i "s/version: '$current'/version: '$new'/" "$ENV_FILE"
+
+# Stage both files
+git add "$VERSION_FILE" "$ENV_FILE"
 
 echo "pre-commit: version bumped $current → $new"
