@@ -98,6 +98,18 @@ export class ServerService {
     }
   }
 
+  async getCheckinReasons(): Promise<string[]> {
+    try {
+      return await firstValueFrom(this.http.get<string[]>(`${this.baseUrl}/checkin-reasons`));
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        throw new AuthenticationException('Unauthorized access. Please log in.');
+      }
+      console.error('Error fetching checkin reasons:', error);
+      return ['Boat not checked in correctly', 'Other'];
+    }
+  }
+
 }
 
 export class AuthenticationException extends Error {

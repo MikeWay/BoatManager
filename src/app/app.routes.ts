@@ -9,6 +9,7 @@ import { ConfirmCheckInComponent } from './confirm-check-in/confirm-check-in.com
 import { ReportProblemComponent } from './report-problem/report-problem.component';
 import { CheckInCompleteComponent } from './check-in-complete/check-in-complete.component';
 import { HomeComponent } from './home/home.component';
+import { CheckinReasonComponent } from './checkin-reason/checkin-reason.component';
 
 export const routes: Routes = [
     { path: '', component: CheckInOrOutComponent },
@@ -21,6 +22,7 @@ export const routes: Routes = [
     { path: 'check-out-complete', component: CheckOutCompleteComponent },
     { path: 'confirm-check-in', component: ConfirmCheckInComponent }, // Assuming this is the start of the check-in process
     { path: 'report-problem', component: ReportProblemComponent },
+    { path: 'checkin-reason', component: CheckinReasonComponent },
     { path: 'check-in-complete', component: CheckInCompleteComponent }, // Assuming this is the end of the check-in process
     { path: '**', redirectTo: '' }
 ];

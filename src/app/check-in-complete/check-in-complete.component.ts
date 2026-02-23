@@ -27,14 +27,19 @@ export class CheckInCompleteComponent implements OnInit {
 
       try {
         // Do the actual check-in
-        if (this.currentState && this.currentState.currentBoat && this.currentState.currentBoat.checkedOutTo) {
-          const success = await this.server.checkInBoat(this.currentState.currentBoat, this.currentState.currentBoat.checkedOutTo, 
-              this.currentState.defects,  
-              this.currentState.engineHours, this.currentState.returnedKey, this.currentState.refueledBoat);
-          if (success) {
-            console.log('Check-in successful');
-          } else {
-            console.error('Check-in failed');
+        if (this.currentState && this.currentState.currentBoat) {
+          const userCheckingIn = (this.currentState.notTheOriginalUser && this.currentState.currentPerson)
+            ? this.currentState.currentPerson
+            : this.currentState.currentBoat.checkedOutTo;
+          if (userCheckingIn) {
+            const success = await this.server.checkInBoat(this.currentState.currentBoat, userCheckingIn,
+                this.currentState.defects,
+                this.currentState.engineHours, this.currentState.returnedKey, this.currentState.refueledBoat);
+            if (success) {
+              console.log('Check-in successful');
+            } else {
+              console.error('Check-in failed');
+            }
           }
         }
       } catch (error) {

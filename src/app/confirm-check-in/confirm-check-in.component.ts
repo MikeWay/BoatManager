@@ -26,7 +26,7 @@ export class ConfirmCheckInComponent implements OnInit {
 problemsWithBoat: any;
 returnedKey: any;
 refueledBoat: any;
-iAmTheUser: any;
+iAmTheUser: boolean = true;
 engineHours: number = 0;
 engineMinutes: number = 0;
 
@@ -67,6 +67,7 @@ engineMinutes: number = 0;
       }
       this.currentState.returnedKey = this.returnedKey;
       this.currentState.refueledBoat = this.refueledBoat;
+      this.currentState.notTheOriginalUser = !this.iAmTheUser;
       this.stateService.updateState(this.currentState);
     }
   }

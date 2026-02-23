@@ -9,6 +9,10 @@
         "Juniors",
         "Other"
     ],
+    "checkin_reasons": [
+        "Boat not checked in correctly",
+        "Other"
+    ],
     "weekly_report_recipients": ["training@exe-sailing-club.org"]
 
 }

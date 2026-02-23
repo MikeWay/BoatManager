@@ -37,6 +37,8 @@ export class AppState {
     public enablePreviousButton: boolean = false;
     public problemsWithBoat: boolean | undefined;
     public defects: Defect[] = [];
+    public notTheOriginalUser: boolean = false;
+    public checkinReason: string | null = null;
 
 
     public reset(): void {
@@ -56,6 +58,8 @@ export class AppState {
         this.engineHours = 0;
         this.returnedKey = null;
         this.refueledBoat = null;
+        this.notTheOriginalUser = false;
+        this.checkinReason = null;
     }
 }
 

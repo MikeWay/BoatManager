@@ -5,6 +5,7 @@ import { Person } from "../model/Person";
 import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 import { sendFaultNotificationEmail } from '../email/emailService';
+import { Config } from '../model/Config';
 
 
 // write the current directory to the console
@@ -156,6 +157,14 @@ class ApiServer {
     }
   }
 
+
+  public getCheckinReasons(req: Request, res: Response) {
+    const reasons: string[] = Config.getInstance().get('checkin_reasons') ?? [
+      'Boat not checked in correctly',
+      'Other',
+    ];
+    return res.status(200).json(reasons);
+  }
 
   public login(req: Request, res: Response) {
 

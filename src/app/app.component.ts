@@ -32,6 +32,8 @@ export class AppComponent implements OnInit, OnDestroy {
     'check-in-or-out': 'boat-list',
     'boat-list': 'confirm-check-in',
     'confirm-check-in': 'check-in-complete',
+    'who-are-you': 'checkin-reason',
+    'checkin-reason': 'check-in-complete',
     'check-in-complete': 'check-in-or-out',
     'report-problem': 'check-in-complete',
   };
@@ -76,7 +78,9 @@ export class AppComponent implements OnInit, OnDestroy {
     const transitions = this.currentState?.checkOutInProgress ? this.pageTransitionsCheckOut : this.pageTransitionsCheckIn;
 
     // route to 'next' page
-    if (this.currentPage === 'confirm-check-in' && this.currentState?.problemsWithBoat) {
+    if (this.currentPage === 'confirm-check-in' && this.currentState?.notTheOriginalUser) {
+      this.currentPage = 'who-are-you';
+    } else if (this.currentPage === 'confirm-check-in' && this.currentState?.problemsWithBoat) {
       this.currentPage = 'report-problem';
     } else {
       this.currentPage = transitions[this.currentPage] || 'check-in-or-out';
@@ -90,9 +94,13 @@ export class AppComponent implements OnInit, OnDestroy {
     // Handle Previous button click logic here
     console.log('Previous button clicked');
     const transitions = this.currentState?.checkOutInProgress ? this.pageTransitionsCheckOut : this.pageTransitionsCheckIn;
-    // route to 'previous' page
-    const previousPage = Object.keys(transitions).find(key => transitions[key] === this.currentPage);
-    this.currentPage = previousPage || 'check-in-or-out';
+    // Special case: who-are-you during check-in → back to confirm-check-in
+    if (this.currentPage === 'who-are-you' && !this.currentState?.checkOutInProgress) {
+      this.currentPage = 'confirm-check-in';
+    } else {
+      const previousPage = Object.keys(transitions).find(key => transitions[key] === this.currentPage);
+      this.currentPage = previousPage || 'check-in-or-out';
+    }
     this.router.navigate([`/${this.currentPage}`]);
   }
 
