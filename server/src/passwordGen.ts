@@ -7,15 +7,7 @@ function promptPassword(query: string): Promise<string> {
             input: process.stdin,
             output: process.stdout,
         });
-        // Suppress echoing of the password
-        (rl as any)._writeToOutput = function (s: string) {
-            if (s === query) {
-                (rl as any).output.write(s); // show the prompt itself
-            }
-            // swallow everything else (the typed characters)
-        };
         rl.question(query, answer => {
-            (rl as any).output.write('\n');
             rl.close();
             resolve(answer);
         });
