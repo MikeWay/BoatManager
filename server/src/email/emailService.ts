@@ -157,13 +157,19 @@ ${tableRows(data.weeklyHoursByBoat, data.boatNameById)}
   <tr><td><strong>Total</strong></td><td style="text-align:right"><strong>${fmt(data.weeklyTotalHours)}</strong></td></tr>
 </table>
 
-<h3>3. Engine Hours This Week by Checkout Reason</h3>
+<h3>3. Engine Hours This Year by Checkout Reason (${yearLabel})</h3>
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr><th>Reason</th><th>Hours</th></tr>
+${tableRows(data.yearlyHoursByReason)}
+</table>
+
+<h3>4. Engine Hours This Week by Checkout Reason</h3>
 <table border="1" cellpadding="4" cellspacing="0">
   <tr><th>Reason</th><th>Hours</th></tr>
 ${tableRows(data.weeklyHoursByReason)}
 </table>
 
-<h3>4. Outstanding Faults</h3>
+<h3>5. Outstanding Faults</h3>
 <table border="1" cellpadding="4" cellspacing="0">
   <tr><th>Boat</th><th>Faults</th></tr>
 ${faultRows}
@@ -190,6 +196,12 @@ ${faultRows}
         csvLines.push(`"${name}",${fmt(hours)}`);
     }
     csvLines.push(`Total,${fmt(data.weeklyTotalHours)}`);
+    csvLines.push('');
+    csvLines.push(`Engine Hours This Year by Reason (${yearLabel})`);
+    csvLines.push('Reason,Hours');
+    for (const [reason, hours] of data.yearlyHoursByReason.entries()) {
+        csvLines.push(`"${reason}",${fmt(hours)}`);
+    }
     csvLines.push('');
     csvLines.push('Engine Hours This Week by Reason');
     csvLines.push('Reason,Hours');

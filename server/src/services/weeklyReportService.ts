@@ -11,6 +11,7 @@ export interface WeeklyReportData {
     yearStart: Date;
     yearlyHoursByBoat: Map<string, number>;   // boatId → total hours this year
     yearlyTotalHours: number;
+    yearlyHoursByReason: Map<string, number>; // reason → total hours this year
     weeklyHoursByBoat: Map<string, number>;   // boatId → total hours this week
     weeklyTotalHours: number;
     weeklyHoursByReason: Map<string, number>; // reason → total hours this week
@@ -59,6 +60,7 @@ export async function generateWeeklyReportData(options?: { manualTrigger?: boole
     }
 
     const yearlyHoursByBoat = new Map<string, number>();
+    const yearlyHoursByReason = new Map<string, number>();
     const weeklyHoursByBoat = new Map<string, number>();
     const weeklyHoursByReason = new Map<string, number>();
 
@@ -72,6 +74,10 @@ export async function generateWeeklyReportData(options?: { manualTrigger?: boole
         if (ts >= yearStartMs) {
             const prev = yearlyHoursByBoat.get(eh.boatId) ?? 0;
             yearlyHoursByBoat.set(eh.boatId, prev + eh.hours);
+
+            const reason = eh.reason || 'Unknown';
+            const prevReason = yearlyHoursByReason.get(reason) ?? 0;
+            yearlyHoursByReason.set(reason, prevReason + eh.hours);
         }
 
         if (ts >= weekStartMs && ts <= weekEndMs) {
@@ -106,6 +112,7 @@ export async function generateWeeklyReportData(options?: { manualTrigger?: boole
         yearStart,
         yearlyHoursByBoat,
         yearlyTotalHours,
+        yearlyHoursByReason,
         weeklyHoursByBoat,
         weeklyTotalHours,
         weeklyHoursByReason,
