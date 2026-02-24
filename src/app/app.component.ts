@@ -52,12 +52,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    // Check server version matches client version
-    this.serverService.getServerVersion().then(serverVersion => {
-      if (serverVersion && serverVersion !== environment.version) {
-        this.showVersionMismatch = true;
-      }
-    });
+    // Check server version matches client version (production only)
+    if (environment.production) {
+      this.serverService.getServerVersion().then(serverVersion => {
+        if (serverVersion && serverVersion !== environment.version) {
+          this.showVersionMismatch = true;
+        }
+      });
+    }
 
     // Initialize the state service or any other necessary setup
     this.stateService.currentState.subscribe(state => {
