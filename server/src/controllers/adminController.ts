@@ -281,6 +281,49 @@ export class AdminController {
         res.render('index', { title: 'Load Users' });
     }
 
+    public trialUploadUsers(req: Request, res: Response): void {
+        res.locals.pageBody = 'adminTrialUploadUsers';
+        req.session.pageBody = res.locals.pageBody;
+        res.render('index', { title: 'Trial Upload Users' });
+    }
+
+    public async trialUploadUsersProcess(req: MulterRequest, res: Response): Promise<void> {
+        try {
+            if (!req.file) {
+                res.render('error', { title: 'Error', error: 'No file uploaded' });
+                return;
+            }
+
+            // Parse new users from CSV (same logic as uploadUsers)
+            const csvData = req.file.buffer.toString('utf-8');
+            const lines = csvData.split('\n').filter(line => line.trim() !== '');
+            const header = lines[0].split(',').map(h => h.trim());
+            const newUsers: Person[] = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim());
+                if (values.length !== header.length) continue;
+                if (!values[3] || !values[3].includes('-')) continue; // skip if no dob
+                const [year, month, day] = values[3].split('-').map(v => parseInt(v, 10));
+                newUsers.push(new Person(values[0], values[1], values[2], month, day, year));
+            }
+
+            // Load current users from the database (would be deleted)
+            const usersToDelete = await dao.personManager.loadAllPersons();
+
+            res.locals.usersToDelete = usersToDelete;
+            res.locals.newUsers = newUsers;
+            res.locals.totalAfter = newUsers.length;
+            res.locals.pageBody = 'adminTrialUploadUsersReport';
+            req.session.pageBody = res.locals.pageBody;
+            res.render('index', { title: 'Trial Upload Users — Report' });
+
+        } catch (error) {
+            console.error('Error processing trial upload:', error);
+            res.render('error', { title: 'Error', error: 'Failed to process trial upload' });
+        }
+    }
+
     public async reportEngineHours(req: Request, res: Response): Promise<void> {
         // load engine hours for all boats
         let engineHours: EngineHours[] = await dao.engineHoursManager.loadAllEngineHoursForAllBoats();
@@ -426,7 +469,8 @@ export class AdminController {
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(',').map(v => v.trim());
                 if (values.length !== header.length) continue; // skip malformed lines
-                // split values[4] (e.g., "1990-01-01") into day, month, year
+                if (!values[3] || !values[3].includes('-')) continue; // skip if no dob
+                // split values[3] (e.g., "1990-01-01") into day, month, year
                 const [year, month, day] = values[3].split('-').map(v => parseInt(v, 10));
                 // Create a new Person object
                 const person = new Person(values[0], values[1], values[2], month, day, year);

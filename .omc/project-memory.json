@@ -1,0 +1,245 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1774100700387,
+  "projectRoot": "/home/mjrw/workNG/BoatManager",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "@angular/core",
+        "version": "20.1.1",
+        "category": "frontend"
+      },
+      {
+        "name": "@playwright/test",
+        "version": "1.54.1",
+        "category": "testing"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": null,
+    "devCommand": "npm run start",
+    "scripts": {
+      "ng": "ng",
+      "start": "ng serve",
+      "start-server": "cd server && npm install && npm run start",
+      "build-all": "npm install && npm run build && npm run build-server",
+      "build-all-prod": "npm install && npm run build && npm run build-server-prod",
+      "build": "npm install && ng build",
+      "build-server": "cd server && npm install && npm run build",
+      "build-server-prod": "cd server && npm install && npm run build:prod",
+      "watch": "ng build --watch --configuration development",
+      "test": "ng test",
+      "e2e": "npm run playwright test",
+      "e2eui": "npx playwright test --ui",
+      "gentest": "npx playwright codegen http://localhost:4200",
+      "deploy": "./deploy.sh"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": "*.spec.ts",
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src",
+      "tests"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 0,
+      "lastAccessed": 1774100700377,
+      "keyFiles": []
+    },
+    "playwright-report": {
+      "path": "playwright-report",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774100700377,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 1,
+      "lastAccessed": 1774100700383,
+      "keyFiles": [
+        "favicon.ico"
+      ]
+    },
+    "server": {
+      "path": "server",
+      "purpose": null,
+      "fileCount": 14,
+      "lastAccessed": 1774100700385,
+      "keyFiles": [
+        "README.html",
+        "README.md",
+        "config.json",
+        "config.json.example",
+        "eslint.config.mjs"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 4,
+      "lastAccessed": 1774100700385,
+      "keyFiles": [
+        "index.html",
+        "main.ts",
+        "proxy.conf.json",
+        "styles.sass"
+      ]
+    },
+    "test-results": {
+      "path": "test-results",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774100700385,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 4,
+      "lastAccessed": 1774100700385,
+      "keyFiles": [
+        "app.flow.spec.ts",
+        "checkin-flow.spec.ts",
+        "e2e.spec.ts",
+        "e2eTestUtils.ts"
+      ]
+    },
+    "tests-examples": {
+      "path": "tests-examples",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1774100700385,
+      "keyFiles": [
+        "demo-todo-app.spec.ts"
+      ]
+    },
+    "~": {
+      "path": "~",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1774100700386,
+      "keyFiles": []
+    },
+    "server/dist": {
+      "path": "server/dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 4,
+      "lastAccessed": 1774100700386,
+      "keyFiles": [
+        "environment.js",
+        "passwordGen.js",
+        "server.js"
+      ]
+    },
+    "server/node_modules": {
+      "path": "server/node_modules",
+      "purpose": "Dependencies",
+      "fileCount": 1,
+      "lastAccessed": 1774100700387,
+      "keyFiles": []
+    },
+    "src/app": {
+      "path": "src/app",
+      "purpose": "Application code",
+      "fileCount": 15,
+      "lastAccessed": 1774100700387,
+      "keyFiles": [
+        "app-state.spec.ts",
+        "app-state.ts",
+        "app.component.html"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "server/src/controllers/adminController.ts",
+      "accessCount": 2,
+      "lastAccessed": 1774101004757,
+      "type": "file"
+    },
+    {
+      "path": "server/src/routes/routes.ts",
+      "accessCount": 2,
+      "lastAccessed": 1774101009117,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminLoadUsers.ejs",
+      "accessCount": 1,
+      "lastAccessed": 1774100947292,
+      "type": "file"
+    },
+    {
+      "path": "server/src/model/PersonManager.ts",
+      "accessCount": 1,
+      "lastAccessed": 1774100952242,
+      "type": "file"
+    },
+    {
+      "path": "server/src/model/Person.ts",
+      "accessCount": 1,
+      "lastAccessed": 1774100972707,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminTrialUploadUsers.ejs",
+      "accessCount": 1,
+      "lastAccessed": 1774100993555,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminTrialUploadUsersReport.ejs",
+      "accessCount": 1,
+      "lastAccessed": 1774100993670,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminPage.ejs",
+      "accessCount": 1,
+      "lastAccessed": 1774101021425,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
