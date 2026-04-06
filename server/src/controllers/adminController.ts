@@ -381,6 +381,34 @@ export class AdminController {
         // load engine hours for specifc boat
     }
 
+    public findMembersForm(req: Request, res: Response): void {
+        res.locals.pageBody = 'adminFindMembers';
+        res.locals.members = null;
+        res.locals.searchLetter = '';
+        req.session.pageBody = res.locals.pageBody;
+        res.render('index', { title: 'Find Members' });
+    }
+
+    public async findMembersSearch(req: Request, res: Response): Promise<void> {
+        const letter: string = (req.body.letter || '').trim().charAt(0);
+        res.locals.pageBody = 'adminFindMembers';
+        res.locals.searchLetter = letter;
+        if (!letter || !/^[a-zA-Z]$/.test(letter)) {
+            res.locals.members = [];
+            res.locals.error = 'Please enter a single letter.';
+        } else {
+            try {
+                res.locals.members = await dao.personManager.getPersonsBySurnameInitial(letter);
+            } catch (error) {
+                console.error('Error finding members:', error);
+                res.locals.members = [];
+                res.locals.error = 'Failed to retrieve members.';
+            }
+        }
+        req.session.pageBody = res.locals.pageBody;
+        res.render('index', { title: 'Find Members' });
+    }
+
     public developerOptions(req: Request, res: Response): void {
         res.locals.pageBody = 'adminDeveloperOptions';
         req.session.pageBody = res.locals.pageBody;

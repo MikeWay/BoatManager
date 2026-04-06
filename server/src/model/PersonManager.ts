@@ -95,6 +95,15 @@ export class PersonManager {
         }
     }
 
+    // method to get all persons whose surname starts with a given letter
+    async getPersonsBySurnameInitial(letter: string): Promise<Person[]> {
+        const persons = await this.loadAllPersons();
+        const lowerLetter = letter.toLowerCase();
+        return persons
+            .filter(p => p.lastName.toLowerCase().startsWith(lowerLetter))
+            .sort((a, b) => a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName));
+    }
+
     // method to get a person by first letter of their last name , there day of birth and month of birth
     async getPersonByLastNameAndBirthDate(
         firstLetterLC: string,
