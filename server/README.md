@@ -59,6 +59,7 @@ All API routes require a valid JWT Bearer token in the `Authorization` header.
 
 | Method | Path | Description |
 |---|---|---|
+| GET | `/api/version` | Returns current server version (no auth required) |
 | POST | `/api/login` | Authenticate and receive a JWT token |
 | POST | `/api/check-person` | Look up a member by surname initial + date of birth |
 | GET | `/api/available-boats` | List boats not currently checked out |
@@ -66,6 +67,7 @@ All API routes require a valid JWT Bearer token in the `Authorization` header.
 | POST | `/api/check-out-boat` | Check out a boat (records user, reason, timestamp) |
 | POST | `/api/check-in-boat` | Check in a boat (records defects, engine hours) |
 | GET | `/api/defects-list` | List known defect types |
+| GET | `/api/checkin-reasons` | List available check-in reasons |
 
 ### Login
 
@@ -156,7 +158,14 @@ Admin routes require a valid JWT stored in the `jwt` cookie, issued at admin log
 | POST | `/admin/checkIfDefectToBeCleared` | Mark a defect for clearing |
 | POST | `/admin/confirmDefectCleared` | Confirm a defect has been resolved |
 | POST | `/admin/clearAllBoatFaults` | Clear all faults for a boat |
-| GET | `/admin/report` | Generate full log reports |
+| GET | `/admin/trialUploadUsers` | Form to trial-upload members (no data changed) |
+| POST | `/admin/trial-upload-users` | Run trial upload, show before/after report |
+| GET | `/admin/findMembers` | Find members by surname initial |
+| POST | `/admin/findMembers` | Search and display matching members |
+| GET | `/admin/weeklyReport` | Form to send the weekly report |
+| POST | `/admin/weeklyReport` | Send weekly report to specified recipients |
+| GET | `/admin/developerOptions` | Developer options page |
+| GET | `/admin/report` | Download full audit log as CSV |
 
 ---
 
@@ -185,7 +194,7 @@ All database access goes through the `dao` singleton (`src/model/dao.ts`), which
 | Manager | Responsibility |
 |---|---|
 | `BoatManager` | Boat CRUD, check-out / check-in state |
-| `PersonManager` | Member lookup by surname initial + DOB |
+| `PersonManager` | Member lookup by surname initial + DOB; list all members by surname initial |
 | `LogManager` | Append-only audit log of all check-in/out events |
 | `DefectManager` | Defect records per boat |
 | `EngineHoursManager` | Engine hours records per check-in |
@@ -260,12 +269,17 @@ npm test
 
 ## Deployment
 
-The server is run using **forever** to ensure automatic restart on crash.
+Production runs on **AWS Lightsail** (`bitnami@ribmanager.exe-sailing-club.org`, eu-west-2) as a **systemd** service (`boatmanager.service`).
 
 ```bash
 # From project root
-./start.sh   # starts with forever
-./stop.sh    # stops the forever process
+./deploy.sh        # builds everything and deploys to production (also: npm run deploy)
 ```
+
+The deploy script:
+1. SSHes to the Lightsail instance using `~/.ssh/LightsailDefaultKey-eu-west-2.pem`
+2. Pulls the latest code from `origin/master`
+3. Runs `npm run build-all-prod` (Angular + server TypeScript)
+4. Restarts the `boatmanager.service` systemd unit
 
 Apache2 is configured as a reverse proxy, forwarding public HTTPS traffic to `localhost:3000`.

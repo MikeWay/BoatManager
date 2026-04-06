@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastScanned": 1774100700387,
+  "lastScanned": 1775405531276,
   "projectRoot": "/home/mjrw/workNG/BoatManager",
   "techStack": {
     "languages": [
@@ -80,14 +80,14 @@
       "path": "dist",
       "purpose": "Distribution/build output",
       "fileCount": 0,
-      "lastAccessed": 1774100700377,
+      "lastAccessed": 1775405531247,
       "keyFiles": []
     },
     "playwright-report": {
       "path": "playwright-report",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1774100700377,
+      "lastAccessed": 1775405531248,
       "keyFiles": [
         "index.html"
       ]
@@ -96,7 +96,7 @@
       "path": "public",
       "purpose": "Public files",
       "fileCount": 1,
-      "lastAccessed": 1774100700383,
+      "lastAccessed": 1775405531261,
       "keyFiles": [
         "favicon.ico"
       ]
@@ -105,7 +105,7 @@
       "path": "server",
       "purpose": null,
       "fileCount": 14,
-      "lastAccessed": 1774100700385,
+      "lastAccessed": 1775405531264,
       "keyFiles": [
         "README.html",
         "README.md",
@@ -118,7 +118,7 @@
       "path": "src",
       "purpose": "Source code",
       "fileCount": 4,
-      "lastAccessed": 1774100700385,
+      "lastAccessed": 1775405531265,
       "keyFiles": [
         "index.html",
         "main.ts",
@@ -130,14 +130,14 @@
       "path": "test-results",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1774100700385,
+      "lastAccessed": 1775405531265,
       "keyFiles": []
     },
     "tests": {
       "path": "tests",
       "purpose": "Test files",
       "fileCount": 4,
-      "lastAccessed": 1774100700385,
+      "lastAccessed": 1775405531265,
       "keyFiles": [
         "app.flow.spec.ts",
         "checkin-flow.spec.ts",
@@ -149,7 +149,7 @@
       "path": "tests-examples",
       "purpose": null,
       "fileCount": 1,
-      "lastAccessed": 1774100700385,
+      "lastAccessed": 1775405531266,
       "keyFiles": [
         "demo-todo-app.spec.ts"
       ]
@@ -158,14 +158,14 @@
       "path": "~",
       "purpose": null,
       "fileCount": 0,
-      "lastAccessed": 1774100700386,
+      "lastAccessed": 1775405531266,
       "keyFiles": []
     },
     "server/dist": {
       "path": "server/dist",
       "purpose": "Distribution/build output",
       "fileCount": 4,
-      "lastAccessed": 1774100700386,
+      "lastAccessed": 1775405531269,
       "keyFiles": [
         "environment.js",
         "passwordGen.js",
@@ -176,14 +176,14 @@
       "path": "server/node_modules",
       "purpose": "Dependencies",
       "fileCount": 1,
-      "lastAccessed": 1774100700387,
+      "lastAccessed": 1775405531271,
       "keyFiles": []
     },
     "src/app": {
       "path": "src/app",
       "purpose": "Application code",
       "fileCount": 15,
-      "lastAccessed": 1774100700387,
+      "lastAccessed": 1775405531275,
       "keyFiles": [
         "app-state.spec.ts",
         "app-state.ts",
@@ -193,51 +193,69 @@
   },
   "hotPaths": [
     {
-      "path": "server/src/controllers/adminController.ts",
-      "accessCount": 2,
-      "lastAccessed": 1774101004757,
+      "path": "server/README.md",
+      "accessCount": 6,
+      "lastAccessed": 1775477590551,
       "type": "file"
     },
     {
       "path": "server/src/routes/routes.ts",
-      "accessCount": 2,
-      "lastAccessed": 1774101009117,
-      "type": "file"
+      "accessCount": 3,
+      "lastAccessed": 1775457664024,
+      "type": "directory"
     },
     {
-      "path": "server/views/adminLoadUsers.ejs",
-      "accessCount": 1,
-      "lastAccessed": 1774100947292,
-      "type": "file"
+      "path": "server/src/model/dao.ts",
+      "accessCount": 2,
+      "lastAccessed": 1775405622096,
+      "type": "directory"
     },
     {
       "path": "server/src/model/PersonManager.ts",
+      "accessCount": 2,
+      "lastAccessed": 1775457649483,
+      "type": "file"
+    },
+    {
+      "path": "server/src/controllers/adminController.ts",
+      "accessCount": 2,
+      "lastAccessed": 1775457659391,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminPage.ejs",
+      "accessCount": 2,
+      "lastAccessed": 1775457677205,
+      "type": "file"
+    },
+    {
+      "path": "server/views/adminListUsers.ejs",
       "accessCount": 1,
-      "lastAccessed": 1774100952242,
+      "lastAccessed": 1775405608892,
       "type": "file"
     },
     {
       "path": "server/src/model/Person.ts",
       "accessCount": 1,
-      "lastAccessed": 1774100972707,
+      "lastAccessed": 1775405627158,
+      "type": "file"
+    },
+    {
+      "path": "server/views/index.ejs",
+      "accessCount": 1,
+      "lastAccessed": 1775405634780,
       "type": "file"
     },
     {
       "path": "server/views/adminTrialUploadUsers.ejs",
       "accessCount": 1,
-      "lastAccessed": 1774100993555,
+      "lastAccessed": 1775405635036,
       "type": "file"
     },
     {
-      "path": "server/views/adminTrialUploadUsersReport.ejs",
+      "path": "server/views/adminFindMembers.ejs",
       "accessCount": 1,
-      "lastAccessed": 1774100993670,
-      "type": "file"
-    },
-    {
-      "path": "server/views/adminPage.ejs",
-      "accessCount": 1,
-      "lastAccessed": 1774101021425,
+      "lastAccessed": 1775457673169,
       "type": "file"
     }
   ],
