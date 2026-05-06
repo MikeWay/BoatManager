@@ -78,6 +78,50 @@ export class AdminController {
         }
     }
 
+    public async getUsageReport(req: Request, res: Response): Promise<void> {
+        const toMs = Date.now();
+        const fromMs = toMs - 7 * 24 * 60 * 60 * 1000;
+        const entries = await logManager.getLogEntriesForDateRange(fromMs, toMs);
+
+        const pad = (n: number) => n < 10 ? '0' + n : '' + n;
+        const fmt = (ms: number) => {
+            const d = new Date(ms);
+            return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+        const durStr = (outMs: number, inMs: number | undefined) => {
+            if (!inMs) return 'In use';
+            const mins = Math.round((inMs - outMs) / 60000);
+            const h = Math.floor(mins / 60);
+            const m = mins % 60;
+            return h > 0 ? `${h}h ${m}m` : `${m}m`;
+        };
+
+        const fromDate = new Date(fromMs);
+        const toDate = new Date(toMs);
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const dateRange = `${fromDate.getDate()} ${months[fromDate.getMonth()]} – ${toDate.getDate()} ${months[toDate.getMonth()]} ${toDate.getFullYear()}`;
+
+        const displayEntries = entries.map(e => ({
+            boatName: e.boatName,
+            personName: e.personName,
+            checkOut: fmt(e.checkOutDateTime ?? 0),
+            checkIn: e.checkInDateTime ? fmt(e.checkInDateTime) : 'In use',
+            duration: durStr(e.checkOutDateTime ?? 0, e.checkInDateTime || undefined),
+            reason: e.checkOutReason || '',
+        }));
+
+        res.locals.entries = displayEntries;
+        res.locals.dateRange = dateRange;
+        res.locals.pageBody = 'adminUsageReport';
+        req.session.pageBody = res.locals.pageBody;
+        try {
+            res.render('index', { title: 'Admin - Usage Report' });
+        } catch (error) {
+            console.error('Error rendering adminUsageReport view:', error);
+            res.status(500).render('error', { title: 'Admin - Usage Report', error: 'Failed to render view' });
+        }
+    }
+
     public async checkInAllBoats(req: Request, res: Response): Promise<void> {
         // TODO: Implement the logic for checking in all boats
         await dao.boatManager.checkInAllBoats();

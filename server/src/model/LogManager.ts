@@ -30,6 +30,13 @@ export class LogManager {
         }
     }
 
+    public async getLogEntriesForDateRange(fromMs: number, toMs: number): Promise<LogEntry[]> {
+        const all = await this.listLogEntries();
+        return all
+            .filter(e => (e.checkOutDateTime ?? 0) >= fromMs && (e.checkOutDateTime ?? 0) <= toMs)
+            .sort((a, b) => (b.checkOutDateTime ?? 0) - (a.checkOutDateTime ?? 0));
+    }
+
     public async listLogEntries(): Promise<LogEntry[]> {
         const command = new ScanCommand({
             TableName: LOG_TABLE_NAME,
