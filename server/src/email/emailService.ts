@@ -92,6 +92,87 @@ ${defects.map(d => {
     console.log(`Fault notification email sent to ${FAULT_NOTIFICATION_EMAIL} for boat ${boatName}`);
 }
 
+export async function sendNewFaultNotificationEmail(
+    boatName: string,
+    defects: ReportedDefect[],
+    personName: string,
+    engineHours: number,
+    recipients: string[]
+): Promise<void> {
+    const smtpHost = process.env['SMTP_HOST'];
+    if (!smtpHost) {
+        console.warn('SMTP_HOST not set — skipping new-fault notification email');
+        return;
+    }
+    if (!recipients || recipients.length === 0) {
+        console.warn('sendNewFaultNotificationEmail: no recipients — skipping');
+        return;
+    }
+
+    const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: Number(process.env['SMTP_PORT'] ?? 587),
+        secure: Number(process.env['SMTP_PORT'] ?? 587) === 465,
+        auth: {
+            user: process.env['SMTP_USER'],
+            pass: process.env['SMTP_PASS'],
+        },
+    });
+
+    const defectLines = defects.map(d => {
+        const detail = d.additionalInfo ? ` — ${d.additionalInfo}` : '';
+        return `  • ${d.defectType.name}${detail}`;
+    }).join('\n');
+
+    const checkedInAt = new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' });
+
+    const text = `
+A new fault has been reported on a boat.
+
+Boat:          ${boatName}
+Checked in by: ${personName}
+Engine hours:  ${engineHours}
+Time:          ${checkedInAt}
+
+New faults (not previously recorded):
+${defectLines}
+
+Please review and arrange for maintenance as required.
+
+-- Boat Manager
+`.trim();
+
+    const html = `
+<p>A new fault has been reported on a boat.</p>
+<table>
+  <tr><td><strong>Boat:</strong></td><td>${boatName}</td></tr>
+  <tr><td><strong>Checked in by:</strong></td><td>${personName}</td></tr>
+  <tr><td><strong>Engine hours:</strong></td><td>${engineHours}</td></tr>
+  <tr><td><strong>Time:</strong></td><td>${checkedInAt}</td></tr>
+</table>
+<p><strong>New faults (not previously recorded):</strong></p>
+<ul>
+${defects.map(d => {
+    const detail = d.additionalInfo ? ` &mdash; ${d.additionalInfo}` : '';
+    return `  <li>${d.defectType.name}${detail}</li>`;
+}).join('\n')}
+</ul>
+<p>Please review and arrange for maintenance as required.</p>
+<hr>
+<small>Boat Manager</small>
+`.trim();
+
+    await transporter.sendMail({
+        from: process.env['SMTP_FROM'] ?? `"Boat Manager" <noreply@exe-sailing-club.org>`,
+        to: recipients.join(', '),
+        subject: `New boat fault reported: ${boatName}`,
+        text,
+        html,
+    });
+
+    console.log(`New-fault notification email sent to ${recipients.join(', ')} for boat ${boatName}`);
+}
+
 function fmt(n: number): string {
     return n.toFixed(1);
 }

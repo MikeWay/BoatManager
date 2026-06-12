@@ -34,28 +34,28 @@ export class DataAccessObject {
     
 
 
-    public async checkInBoat(boat: Boat, checkInByUser: Person, defects: ReportedDefect[], engineHours?: number, reason?: string): Promise<void>    {
+    public async checkInBoat(boat: Boat, checkInByUser: Person, defects: ReportedDefect[], engineHours?: number, reason?: string): Promise<ReportedDefect[]>    {
         if (!boat || !checkInByUser) {
             throw new Error("Boat and user must be provided for check-in.");
         }
         const checkInDateTime = new Date().getTime(); // Current timestamp
-        // Create a log entry for the check-in
-
 
         // Update the boat's status to available
         boat.isAvailable = true;
 
-        // Save the defects to dynamodb
-        // Need to fetch the existing defects and merge them with the latest ones.
-        // 
         const existingDefects = await this.defectManager.loadDefectsForBoat(boat.id);
-        const mergedDefects: ReportedDefect[] = this.mergeDefects(existingDefects, defects );
-        const defectsForBoat = new DefectsForBoat(mergedDefects,  boat.id, checkInDateTime, existingDefects? existingDefects.timestamp : Date.now() );
+
+        // Identify defects being reported for the first time for this boat
+        const newDefects = defects.filter(d =>
+            !existingDefects?.reportedDefects.some(e => e.defectType.id === d.defectType.id)
+        );
+
+        const mergedDefects: ReportedDefect[] = this.mergeDefects(existingDefects, defects);
+        const defectsForBoat = new DefectsForBoat(mergedDefects, boat.id, checkInDateTime, existingDefects ? existingDefects.timestamp : Date.now());
         await this.defectManager.saveDefectsForBoat(defectsForBoat);
         await this.engineHoursManager.saveEngineHours(new EngineHours(boat.id, engineHours || 0, reason ?? ""));
-        // Save the updated boat
-        return this.boatManager.saveBoat(Boat.fromItem(boat));
-      throw new Error("Method not implemented.");
+        await this.boatManager.saveBoat(Boat.fromItem(boat));
+        return newDefects;
     }
 
     private mergeDefects(existingDefects: DefectsForBoat | null, defects: ReportedDefect[]) : ReportedDefect[] {

@@ -18,5 +18,6 @@
         "Boat not checked in correctly",
         "Other"
     ],
-    "weekly_report_recipients": ["training@exe-sailing-club.org"]
+    "weekly_report_recipients": ["training@exe-sailing-club.org"],
+    "new_fault_notification_recipients": ["bosun@exesc.org"]
 }

@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { Person } from "../model/Person";
 import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
-import { sendFaultNotificationEmail } from '../email/emailService';
+import { sendFaultNotificationEmail, sendNewFaultNotificationEmail } from '../email/emailService';
 import { Config } from '../model/Config';
 import { VERSION } from '../version';
 
@@ -66,7 +66,7 @@ class ApiServer {
     const reason: string = boat.checkOutReason || 'No reason provided';
 
     try {
-      await dao.checkInBoat(boat, checkInByUser, defects, engineHours, reason);
+      const newDefects = await dao.checkInBoat(boat, checkInByUser, defects, engineHours, reason);
       const logEntry = new LogEntry({
         action: 'check in',
         boatName: boat.name,
@@ -83,11 +83,20 @@ class ApiServer {
       // Save the log entry
       dao.logManager.saveLogEntry(logEntry);
 
+      const personName = `${checkInByUser.firstName} ${checkInByUser.lastName}`;
+
       // Notify training team if faults were reported
       if (defects.length > 0) {
-        const personName = `${checkInByUser.firstName} ${checkInByUser.lastName}`;
         sendFaultNotificationEmail(boat.name, defects, personName, engineHours)
           .catch(err => console.error('Failed to send fault notification email:', err));
+      }
+
+      // Notify bosun for defects being reported for the first time on this boat
+      if (newDefects.length > 0) {
+        const recipients: string[] = Config.getInstance().get('new_fault_notification_recipients')
+          ?? ['bosun@exesc.org'];
+        sendNewFaultNotificationEmail(boat.name, newDefects, personName, engineHours, recipients)
+          .catch(err => console.error('Failed to send new-fault notification email:', err));
       }
 
       return res.status(200).json({ message: "Boat checked in successfully" });
